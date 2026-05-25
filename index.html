@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PartHunter.ae — Find Car Parts Across the UAE</title>
+  <meta name="description" content="Search every UAE car parts source in one place. Dubizzle, Facebook Marketplace, Deep Performance, Bin Jumah, FMIC, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+
+    <div class="main">
+
+      <div class="hero">
+        <div class="logo">Part<span class="red">Hunter</span><span class="ae">.ae</span></div>
+        <div class="tagline">Every UAE parts source. One search.</div>
+        <div class="search-bar">
+          <input type="text" id="ph-q" placeholder="e.g. S15 coilovers, RB25 intercooler, boost controller..." autocomplete="off" />
+          <button class="search-btn" onclick="doSearch()">
+            <i class="ti ti-search"></i> Search
+          </button>
+        </div>
+        <div class="interpreter" id="ph-interp"></div>
+        <div class="chips">
+          <div class="chip on" onclick="setChip(this,'all')">All</div>
+          <div class="chip" onclick="setChip(this,'new')">New only</div>
+          <div class="chip" onclick="setChip(this,'used')">Used only</div>
+          <div class="chip" onclick="setChip(this,'perf')">Performance shops</div>
+          <div class="chip" onclick="setChip(this,'class')">Classifieds</div>
+        </div>
+      </div>
+
+      <div class="sources-row">
+        <span class="sources-label">Live sources</span>
+        <div class="source-pill"><div class="dot used"></div>Dubizzle</div>
+        <div class="source-pill"><div class="dot used"></div>Facebook Marketplace</div>
+        <div class="source-pill"><div class="dot"></div>Deep Performance</div>
+        <div class="source-pill"><div class="dot"></div>Bin Jumah</div>
+        <div class="source-pill"><div class="dot"></div>FMIC UAE</div>
+        <div class="source-pill"><div class="dot"></div>Intraco</div>
+        <div class="source-pill"><div class="dot"></div>Atomic Shop</div>
+        <div class="source-pill"><div class="dot"></div>YP Performance</div>
+        <div class="source-pill"><div class="dot"></div>Prowayparts</div>
+      </div>
+
+      <div id="ph-feed">
+        <div class="empty">
+          <i class="ti ti-car"></i>
+          <p>Search for any part — engine, suspension, exterior, aero, brakes, anything.<br>Or ask the BuildAI planner what your car needs.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sidebar">
+      <div class="sb-head">
+        <i class="ti ti-tool" style="color:#e63b1e;font-size:20px"></i>
+        <div>
+          <div class="sb-title">Build<span>AI</span></div>
+          <div class="sb-sub">Your personal build planner</div>
+        </div>
+      </div>
+      <div class="sb-body" id="sb-body"></div>
+      <div class="sb-input-row">
+        <input type="text" id="sb-input" placeholder="Reply..." />
+        <button class="send-btn" onclick="sbSend()" aria-label="Send">
+          <i class="ti ti-send"></i>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="search.js"></script>
+  <script src="planner.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
