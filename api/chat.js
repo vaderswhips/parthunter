@@ -40,7 +40,7 @@ Your job is to give genuine, specific build advice based on the user's exact car
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 400,
         system: systemPrompt,
         messages: messages,
