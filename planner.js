@@ -25,6 +25,41 @@ function sbClear() {
   if (t) t.remove();
 }
 
+function showRecCard(cats) {
+  const recId = 'rec-' + Date.now();
+  const recEl = document.createElement('div');
+  recEl.className = 'msg msg-ai';
+  const card = document.createElement('div');
+  card.className = 'rec-card';
+  card.innerHTML = `
+    <div class="rec-title">Find these parts?</div>
+    <div class="rec-tags">${cats.map(c => `<span class="rec-tag">${c}</span>`).join('')}</div>
+    <div class="rec-acts" id="${recId}"></div>`;
+  recEl.appendChild(card);
+
+  const acts = card.querySelector('.rec-acts');
+  const yesBtn = document.createElement('button');
+  yesBtn.className = 'btn-yes';
+  yesBtn.textContent = 'Show in results';
+  yesBtn.onclick = () => {
+    pushAIResults(cats, cats[0]);
+    acts.innerHTML = '<span class="rec-confirmed">Pushed to results feed</span>';
+  };
+
+  const noBtn = document.createElement('button');
+  noBtn.className = 'btn-no';
+  noBtn.textContent = 'Dismiss';
+  noBtn.onclick = () => {
+    acts.innerHTML = '<span class="rec-dismissed">Dismissed</span>';
+  };
+
+  acts.appendChild(yesBtn);
+  acts.appendChild(noBtn);
+
+  document.getElementById('sb-body').appendChild(recEl);
+  document.getElementById('sb-body').scrollTop = 9999;
+}
+
 async function sbSend() {
   const inp = document.getElementById('sb-input');
   const val = inp.value.trim();
@@ -54,25 +89,12 @@ async function sbSend() {
     const cleanText = text.replace(/<PARTS>.*?<\/PARTS>/s, '').trim();
 
     sbHistory.push({ role: 'assistant', content: text });
-
     sbAdd(`<div class="bubble">${cleanText.replace(/\n/g, '<br>')}</div>`);
 
     if (partsMatch) {
       try {
         const cats = JSON.parse(partsMatch[1]);
-        const recId = 'rec-' + Date.now();
-        const recEl = document.createElement('div');
-        recEl.className = 'msg msg-ai';
-        recEl.innerHTML = `<div class="rec-card">
-          <div class="rec-title">Show these parts in results?</div>
-          <div class="rec-desc">${cats.join(', ')}</div>
-          <div class="rec-acts" id="${recId}">
-            <button class="btn-yes" onclick="pushAIResults(${JSON.stringify(cats)},'${cats[0]}');document.getElementById('${recId}').innerHTML='<span style=\\'font-size:11px;color:#16a34a\\'>Pushed to results feed</span>'">Show in results</button>
-            <button class="btn-no" onclick="document.getElementById('${recId}').innerHTML='<span style=\\'font-size:11px;color:#aaa\\'>Dismissed</span>'">Dismiss</button>
-          </div>
-        </div>`;
-        document.getElementById('sb-body').appendChild(recEl);
-        document.getElementById('sb-body').scrollTop = 9999;
+        showRecCard(cats);
       } catch (e) {}
     }
   } catch (e) {

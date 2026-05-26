@@ -249,9 +249,13 @@ body {
   border-radius: var(--radius-sm);
   padding: .65rem .75rem;
 }
-.rec-card-title { font-weight: 500; color: var(--text); margin-bottom: 3px; font-size: 12px; }
-.rec-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-.rec-actions { display: flex; gap: 6px; margin-top: 8px; }
+.rec-title { font-weight: 500; color: var(--text); font-size: 12px; margin-bottom: 8px; }
+.rec-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.rec-tag { background: #fff; border: .5px solid var(--border-strong); border-radius: 4px; padding: 2px 8px; font-size: 11px; color: var(--text-muted); }
+.rec-confirmed { font-size: 11px; color: #16a34a; }
+.rec-dismissed { font-size: 11px; color: var(--text-faint); }
+
+.rec-acts { display: flex; gap: 6px; align-items: center; }
 .btn-yes {
   background: var(--red);
   color: #fff;
