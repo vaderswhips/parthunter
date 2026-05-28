@@ -1,13 +1,36 @@
 const SYNONYMS = {
-  "coils": "coilovers", "springs": "coilovers", "suspension": "coilovers",
-  "blow off": "bov", "dump valve": "bov", "bpv": "bov",
-  "fmic": "intercooler", "front mount": "intercooler",
-  "diff": "lsd", "differential": "lsd",
-  "intake": "intake", "induction kit": "intake", "pod filter": "intake", "cai": "intake",
-  "turbo": "turbo", "snail": "turbo", "forced induction": "turbo",
-  "brakes": "brakes", "brake kit": "brakes", "bbk": "brakes", "big brake": "brakes",
-  "exhaust": "exhaust", "catback": "exhaust", "downpipe": "exhaust",
-  "engine": "engine", "motor": "engine", "swap": "engine",
+  // suspension
+  "coils": "coilovers", "spring": "coilovers", "springs": "coilovers",
+  "suspension": "coilovers", "damper": "coilovers", "shock": "coilovers",
+  // bov
+  "blow off": "bov", "blowoff": "bov", "dump valve": "bov", "bpv": "bov",
+  "bypass valve": "bov", "ssqv": "bov",
+  // intercooler
+  "fmic": "intercooler", "front mount": "intercooler", "charge cooler": "intercooler",
+  "intercooler kit": "intercooler",
+  // lsd
+  "diff": "lsd", "differential": "lsd", "limited slip": "lsd", "r200": "lsd", "r180": "lsd",
+  // intake
+  "induction kit": "intake", "pod filter": "intake", "cai": "intake",
+  "cold air": "intake", "power flow": "intake", "air filter": "intake",
+  // turbo
+  "snail": "turbo", "forced induction": "turbo", "turbocharger": "turbo",
+  "gt28": "turbo", "gt30": "turbo", "gt35": "turbo", "psr": "turbo",
+  // brakes
+  "brake kit": "brakes", "bbk": "brakes", "big brake": "brakes",
+  "caliper": "brakes", "rotor": "brakes", "brembo": "brakes",
+  // exhaust
+  "catback": "exhaust", "cat back": "exhaust", "downpipe": "exhaust",
+  "muffler": "exhaust", "headers": "exhaust", "manifold": "exhaust",
+  // engine
+  "motor": "engine", "swap": "engine", "engine swap": "engine",
+  "complete engine": "engine", "pulled engine": "engine",
+  // gearbox
+  "gearbox": "gearbox", "transmission": "gearbox", "trans": "gearbox",
+  "gbox": "gearbox", "6 speed": "gearbox", "5 speed": "gearbox",
+  "close ratio": "gearbox", "gear box": "gearbox",
+  // wheels
+  "wheels": "wheels", "rims": "wheels", "alloys": "wheels",
 };
 
 const INTERP_LABELS = {
@@ -20,6 +43,8 @@ const INTERP_LABELS = {
   "brakes": "brakes / big brake kit",
   "exhaust": "exhaust system",
   "engine": "engine / swap",
+  "gearbox": "gearbox / transmission",
+  "wheels": "wheels / rims",
 };
 
 let activeFilter = 'all';
@@ -36,7 +61,7 @@ function interpText(q) {
   const n = normalise(q);
   const found = Object.keys(INTERP_LABELS).find(k => n.includes(k));
   if (!found) return null;
-  const cars = ['s13','s14','s15','r32','r33','r34','rb25','sr20','ka24','silvia','skyline','240sx','200sx','180sx'];
+  const cars = ['s13','s14','s15','r32','r33','r34','rb25','sr20','ka24','rb26','2jz','1jz','silvia','skyline','240sx','200sx','180sx','supra','rx7','evo','wrx','sti','m2','m3','m4','civic','integra','ae86','chaser','stagea','350z','370z'];
   const carMatch = cars.find(c => q.toLowerCase().includes(c));
   let txt = 'Searching for: ' + INTERP_LABELS[found];
   if (carMatch) txt += ' → ' + carMatch.toUpperCase() + ' compatible';
@@ -102,7 +127,11 @@ function pushResults(tags, label) {
 function renderResults(res, aiLabel) {
   const feed = document.getElementById('ph-feed');
   if (!res.length) {
-    feed.innerHTML = '<div class="empty"><i class="ti ti-search-off"></i><p>No results found. Try different keywords or ask the BuildAI planner.</p></div>';
+    feed.innerHTML = `<div class="empty">
+      <i class="ti ti-search-off"></i>
+      <p>No results found for that search.</p>
+      <p style="margin-top:8px;font-size:12px">Try: part type + car model (e.g. "coilovers s14")<br>or ask the <strong style="color:var(--red)">BuildAI planner</strong> on the right what your car needs.</p>
+    </div>`;
     return;
   }
 

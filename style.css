@@ -38,9 +38,34 @@ body {
   align-items: start;
 }
 
-@media (max-width: 700px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { order: -1; }
+@media (max-width: 768px) {
+  body { padding: 0; }
+  .layout { grid-template-columns: 1fr; gap: 0; }
+  .main { padding: 0; }
+  .hero { border-radius: 0; padding: 1.5rem 1rem 1.25rem; }
+  .logo-icon { width: 28px; height: 28px; }
+  .logo-text { font-size: 26px; }
+  .search-bar input { font-size: 13px; height: 40px; }
+  .search-btn { height: 40px; padding: 0 1rem; font-size: 12px; }
+  .chips { gap: 5px; }
+  .chip { font-size: 10px; padding: 3px 9px; }
+  .sources-row { padding: 0.75rem 1rem; margin-bottom: 0; }
+  #ph-feed { padding: 0.75rem 1rem; }
+  .card { grid-template-columns: 70px 1fr auto; }
+  .card img { width: 70px; height: 70px; }
+  .card-body { padding: 0.5rem 0.6rem; }
+  .card-title { font-size: 11px; }
+  .card-price { font-size: 13px; }
+  .card-price-col { padding: 0.5rem 0.6rem 0.5rem 0; }
+  .sidebar {
+    order: 2;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    margin-top: 8px;
+  }
+  .sb-body { max-height: 300px; }
 }
 
 /* ---- HERO ---- */
@@ -62,11 +87,22 @@ body {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+.logo-text {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 34px;
   color: #fff;
   letter-spacing: 2px;
-  margin-bottom: 2px;
+  line-height: 1;
 }
 .logo .red { color: var(--red); }
 .logo .ae { color: #444; font-size: 18px; vertical-align: middle; margin-left: 3px; font-family: 'DM Sans', sans-serif; letter-spacing: 0; }
