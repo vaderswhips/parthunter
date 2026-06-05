@@ -7,6 +7,21 @@ const SOURCES = [
   'Facebook Marketplace', 'YP Performance', 'Intraco', 'Atomic Shop', 'Prowayparts'
 ];
 
+// Real homepages for each source. Cards link here until live product feeds
+// replace the mock data with actual per-product URLs.
+const SOURCE_URLS = {
+  'Deep Performance': 'https://www.deepperformance.com',
+  'Bin Jumah': 'https://binjumah.net',
+  'FMIC UAE': 'https://fmic.ae',
+  'YP Performance': 'https://yperformance1.com',
+  'Intraco': 'https://intracotrading.com',
+  'Atomic Shop': 'https://atomic-shop.ae',
+  'Prowayparts': 'https://www.prowayparts.ae',
+  'Dubizzle': 'https://www.dubizzle.com',
+  'Facebook Marketplace': 'https://www.facebook.com/marketplace'
+  // 'Community listing' intentionally omitted — user submissions have no external page.
+};
+
 // Featured = paid placement. `featured:true` shows the gold "Featured" badge.
 const FEATURED = [
   { n: 'PSR Single Turbo Manifold Kit', src: 'Deep Performance', price: '4,200', emoji: '🌀', condition: 'New', featured: true },
