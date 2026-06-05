@@ -23,21 +23,6 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-// Count-up stats
-const so = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) {
-    const n = e.target, target = +n.dataset.count;
-    let c = 0;
-    const step = () => {
-      c += Math.ceil(target / 24) || 1;
-      if (c >= target) n.textContent = target;
-      else { n.textContent = c; requestAnimationFrame(step); }
-    };
-    if (target === 0) n.textContent = '0'; else step();
-    so.unobserve(n);
-  }
-}), { threshold: 0.5 });
-document.querySelectorAll('.stat .n').forEach(n => so.observe(n));
 
 // ---- Partner onboarding: open a pre-filled email ----
 function partnerEmail() {

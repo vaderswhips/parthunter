@@ -23,6 +23,9 @@ function cardHTML(p) {
 function renderResults(list) {
   const grid = document.getElementById('resultsGrid');
   grid.innerHTML = list.map(cardHTML).join('');
+  // Reveal the results section (hidden until the first search / build push).
+  const sec = document.getElementById('results-sec');
+  if (sec) sec.style.display = '';
   // On mobile the grid starts collapsed to a preview; restore that on each new render.
   grid.classList.add('collapsed');
   const btn = document.getElementById('resultsMoreBtn');
