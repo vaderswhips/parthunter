@@ -39,6 +39,29 @@ const so = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: 0.5 });
 document.querySelectorAll('.stat .n').forEach(n => so.observe(n));
 
+// ---- Partner onboarding: open a pre-filled email ----
+function partnerEmail() {
+  const subject = 'Featured partner — PartHunter.ae onboarding';
+  const body =
+`Hi PartHunter team,
+
+We'd like to get our shop featured on PartHunter.ae. Here are our details:
+
+• Shop name:
+• What we sell (brands / categories):
+• Location / emirate:
+• Website or online store:
+• Product feed URL (Shopify/WooCommerce, if any):
+• Instagram:
+• Best contact name & number:
+
+Looking forward to getting onboarded.
+
+Thanks!`;
+  const url = 'mailto:partner@parthunter.ae?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  window.location.href = url;
+}
+
 // ---- Mobile: expand a collapsed grid preview ----
 function toggleMore(gridId, btn) {
   const grid = document.getElementById(gridId);
