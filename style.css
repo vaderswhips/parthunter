@@ -1,6 +1,6 @@
 :root{
   --bg:#0a0a0c; --bg-soft:#111114; --panel:#16161a; --panel-2:#1d1d22;
-  --red:#ff2d2d; --red-deep:#cc1f1f; --red-glow:rgba(255,45,45,.35);
+  --red:#e63b1e; --red-deep:#c12d12; --red-glow:rgba(230,59,30,.35);
   --gold:#f5c451; --gold-deep:#8a6d1f;
   --text:#f4f4f5; --muted:#8a8a92; --line:#26262c; --green:#3ddc84;
   --display:'Bebas Neue',sans-serif; --body:'DM Sans',sans-serif; --mono:'Space Mono',monospace;
@@ -24,6 +24,8 @@ body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
 nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(10,10,12,.72);border-bottom:1px solid var(--line)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:26px;letter-spacing:1px}
+.scope-icon{width:26px;height:26px;color:var(--red);flex:none}
+.foot-in .scope-icon{width:22px;height:22px}
 .brand .logo{position:relative;width:24px;height:24px}
 .brand .logo .ring{inset:8%}
 .brand b{color:var(--red)}
