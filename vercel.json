@@ -1,4 +1,7 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/chat.js": { "maxDuration": 30 },
+    "api/submit-listing.js": { "maxDuration": 15 }
+  }
 }
