@@ -5,14 +5,19 @@ function cardHTML(p) {
   const badge = p.featured
     ? `<span class="badge featured">★ Featured</span>`
     : `<span class="badge ${used ? 'used' : ''}">${p.condition || 'New'}</span>`;
-  return `<div class="card" onclick="toast('Saved to your hunt 🎯')">
+  const url = SOURCE_URLS[p.src];
+  const inner = `
     <div class="img">${badge}<span class="emoji">${p.emoji || '🔧'}</span></div>
     <div class="body">
       <h4>${escapeHTML(p.n)}</h4>
       <div class="src">${escapeHTML(p.src)}</div>
       <div class="price">${escapeHTML(p.price)} <small>AED</small></div>
-    </div>
-  </div>`;
+      <div class="card-link">${url ? 'View on ' + escapeHTML(p.src) + ' ↗' : 'Community listing'}</div>
+    </div>`;
+  if (url) {
+    return `<a class="card" href="${url}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
+  }
+  return `<div class="card">${inner}</div>`;
 }
 
 function renderResults(list) {
