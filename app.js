@@ -55,6 +55,15 @@ function toggleMore(gridId, btn) {
   btn.style.display = 'none';
 }
 
+// ---- Mobile: reveal/hide the How it works steps ----
+function toggleHow(btn) {
+  const steps = document.getElementById('howSteps');
+  if (!steps) return;
+  const open = steps.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  btn.textContent = open ? 'Hide steps ↑' : 'Show the 3 steps ↓';
+}
+
 // ---- Sell a part: modal + submission ----
 function openSell() { document.getElementById('sellModal').classList.add('open'); }
 function closeSell() { document.getElementById('sellModal').classList.remove('open'); }

@@ -234,8 +234,11 @@ footer .muted{color:var(--muted);font-size:13px}
   .stat{padding:16px}
   .stat .n{font-size:40px}
 
-  /* How it works: stack to one column */
-  .steps{grid-template-columns:1fr;gap:12px;margin-top:22px}
+  /* How it works: collapsible on mobile to save scroll */
+  .reveal-btn{display:block;width:100%;margin-top:18px;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:14px;font-weight:700;font-family:var(--body);font-size:15px;cursor:pointer}
+  .reveal-btn:active{border-color:var(--red);color:var(--red)}
+  .steps{grid-template-columns:1fr;gap:12px;margin-top:16px;display:none}
+  .steps.open{display:grid}
   .step{padding:24px}
   .step h3{font-size:28px}
 
@@ -264,3 +267,4 @@ footer .muted{color:var(--muted);font-size:13px}
 
 /* Hide the show-more buttons on desktop entirely */
 .more-btn{display:none}
+.reveal-btn{display:none}
