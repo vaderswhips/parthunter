@@ -266,5 +266,5 @@ footer .muted{color:var(--muted);font-size:13px}
 }
 
 /* Hide the show-more buttons on desktop entirely */
-.more-btn{display:none}
-.reveal-btn{display:none}
+@media(min-width:721px){.more-btn{display:none}}
+@media(min-width:721px){.reveal-btn{display:none}}
