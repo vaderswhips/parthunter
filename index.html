@@ -62,7 +62,8 @@
       </div>
       <button class="ghost-btn" onclick="document.getElementById('partner').scrollIntoView()">Feature your shop →</button>
     </div>
-    <div class="results" id="featuredGrid"></div>
+    <div class="results collapsed" id="featuredGrid"></div>
+    <button class="more-btn" onclick="toggleMore('featuredGrid',this)">Show more featured ↓</button>
   </div>
 </section>
 
@@ -71,7 +72,8 @@
     <div class="eyebrow">// Results</div>
     <h2 class="head" id="resultsHead">Search across every UAE source</h2>
     <p class="lead">Aggregated shop stock plus community listings. Used finds flagged in green, featured partner stock in gold.</p>
-    <div class="results" id="resultsGrid"></div>
+    <div class="results collapsed" id="resultsGrid"></div>
+    <button class="more-btn" id="resultsMoreBtn" onclick="toggleMore('resultsGrid',this)">Show all results ↓</button>
   </div>
 </section>
 
@@ -84,15 +86,16 @@
       <div class="config">
         <div class="field">
           <label>Your car</label>
-          <select id="car">
-            <option>Nissan Silvia S14 / 240SX</option>
-            <option>Nissan Skyline R34 GT-T</option>
-            <option>Toyota Supra MK4</option>
-            <option>Mazda RX-7 FD</option>
-            <option>Subaru WRX STI</option>
-            <option>Honda Civic EK</option>
-            <option>BMW E46 M3</option>
-          </select>
+          <input id="car" type="text" list="carSuggestions" placeholder="e.g. Nissan Silvia S14, Toyota Cressida, anything" value="Nissan Silvia S14 / 240SX" />
+          <datalist id="carSuggestions">
+            <option value="Nissan Silvia S14 / 240SX"></option>
+            <option value="Nissan Skyline R34 GT-T"></option>
+            <option value="Toyota Supra MK4"></option>
+            <option value="Mazda RX-7 FD"></option>
+            <option value="Subaru WRX STI"></option>
+            <option value="Honda Civic EK"></option>
+            <option value="BMW E46 M3"></option>
+          </datalist>
         </div>
         <div class="field">
           <label>Power goal</label>
@@ -144,7 +147,7 @@
     <div class="eyebrow">// From the community</div>
     <h2 class="head">Tag us. Get featured.</h2>
     <p class="lead">Real builds, real finds, real prices. The UAE car scene lives here — drop your build and you might land on the homepage.</p>
-    <div class="feed">
+    <div class="feed collapsed" id="feedGrid">
       <div class="post">
         <div class="ph">🏎️</div>
         <div class="pc">
@@ -170,6 +173,7 @@
         </div>
       </div>
     </div>
+    <button class="more-btn" onclick="toggleMore('feedGrid',this)">Show more posts ↓</button>
   </div>
 </section>
 

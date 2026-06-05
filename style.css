@@ -162,3 +162,72 @@ footer .muted{color:var(--muted);font-size:13px}
 @media(max-width:480px){.row2{grid-template-columns:1fr}}
 .field textarea{resize:vertical;min-height:70px;font-family:var(--body)}
 #sellStatus{font-family:var(--mono);font-size:12px;margin-top:12px;min-height:16px}
+
+/* ============================================================
+   MOBILE — calmer, shorter, search-first (≤720px)
+   Desktop layout above is untouched.
+   ============================================================ */
+@media(max-width:720px){
+  /* Tighten vertical rhythm so sections don't each feel full-height */
+  section.block{padding:46px 0}
+  .wrap{padding:0 18px}
+
+  /* Hero: smaller so the search bar is reachable almost immediately */
+  .hero{padding:30px 0 24px}
+  .tag{margin-bottom:16px;font-size:10px}
+  h1.title{font-size:clamp(40px,15vw,62px)}
+  .hero p.sub{font-size:15px;margin-top:14px}
+  .search-shell{margin-top:24px}
+  .search-box{padding:6px 6px 6px 14px}
+  .search-box input{font-size:15px;padding:11px 0}
+  .search-box button{padding:12px 16px}
+  /* fewer chips on mobile to reduce noise */
+  .chips .chip:nth-child(n+4){display:none}
+
+  /* Calm the motion: drop the big slide-up reveals on small screens */
+  .reveal{opacity:1;transform:none;transition:none}
+
+  /* Section headers smaller, less shouty */
+  h2.head{font-size:clamp(30px,8vw,42px)}
+  .lead{font-size:15px}
+  .eyebrow{margin-bottom:10px}
+
+  /* Grids: single calm column, capped to a preview via .collapsed */
+  .results{grid-template-columns:1fr;gap:12px;margin-top:22px}
+  .results.collapsed > .card:nth-child(n+4){display:none}
+  .card .img{height:120px}
+  .card .img .emoji{font-size:42px}
+
+  /* "Show more" toggle button (hidden on desktop) */
+  .more-btn{display:block;width:100%;margin-top:16px;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:13px;font-weight:700;font-family:var(--body);font-size:14px;cursor:pointer}
+  .more-btn:active{border-color:var(--red);color:var(--red)}
+
+  /* BuildAI: stack already happens; just tighten padding */
+  .buildai .config,.buildai .output{padding:22px}
+  .buildai .output{min-height:auto}
+
+  /* Stats: 2-up, much shorter */
+  .stats{grid-template-columns:repeat(2,1fr);gap:12px;margin-top:24px}
+  .stat{padding:16px}
+  .stat .n{font-size:40px}
+
+  /* Partner pitch: compact card, not a full event */
+  .partner-cta{padding:18px;margin-top:20px}
+  .partner-cta .pc-text h4{font-size:22px}
+  .partner-cta .pc-text p{font-size:13px}
+
+  /* Feed: show 1 post + let them tap for more, cuts a big chunk of scroll */
+  .feed{grid-template-columns:1fr;gap:12px;margin-top:22px}
+  .feed.collapsed > .post:nth-child(n+2){display:none}
+  .post .ph{height:150px;font-size:48px}
+
+  /* Final CTA: shorter */
+  .final{padding:54px 0}
+
+  /* Hide the desktop "Feature your shop" ghost button in the section header;
+     the partner block lower down already covers it, reducing competing CTAs */
+  .sec-top .ghost-btn{display:none}
+}
+
+/* Hide the show-more buttons on desktop entirely */
+.more-btn{display:none}

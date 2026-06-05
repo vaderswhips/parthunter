@@ -39,6 +39,14 @@ const so = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: 0.5 });
 document.querySelectorAll('.stat .n').forEach(n => so.observe(n));
 
+// ---- Mobile: expand a collapsed grid preview ----
+function toggleMore(gridId, btn) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  grid.classList.remove('collapsed');
+  btn.style.display = 'none';
+}
+
 // ---- Sell a part: modal + submission ----
 function openSell() { document.getElementById('sellModal').classList.add('open'); }
 function closeSell() { document.getElementById('sellModal').classList.remove('open'); }

@@ -16,7 +16,12 @@ function cardHTML(p) {
 }
 
 function renderResults(list) {
-  document.getElementById('resultsGrid').innerHTML = list.map(cardHTML).join('');
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = list.map(cardHTML).join('');
+  // On mobile the grid starts collapsed to a preview; restore that on each new render.
+  grid.classList.add('collapsed');
+  const btn = document.getElementById('resultsMoreBtn');
+  if (btn) btn.style.display = '';
 }
 
 function quickSearch(q) {

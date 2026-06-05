@@ -6,12 +6,17 @@ document.querySelectorAll('#goals .gp').forEach(g => g.onclick = () => {
 });
 
 async function runBuild() {
-  const car = document.getElementById('car').value;
+  const car = document.getElementById('car').value.trim();
   const goal = document.querySelector('#goals .gp.active').dataset.g;
   const budget = document.getElementById('budget').value;
   const out = document.getElementById('buildOut');
 
-  out.innerHTML = `<div class="ai-thinking"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> BuildAI is mapping your <b style="color:var(--text)">${car}</b> for <b style="color:var(--text)">${goal}</b><span class="blink">_</span></div>`;
+  if (!car) {
+    out.innerHTML = `<div class="plan-empty"><span class="big">🚗</span><span>Type your car first — make and model, e.g. "Nissan Silvia S14".</span></div>`;
+    return;
+  }
+
+  out.innerHTML = `<div class="ai-thinking"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> BuildAI is mapping your <b style="color:var(--text)">${escapeHTML(car)}</b> for <b style="color:var(--text)">${escapeHTML(goal)}</b><span class="blink">_</span></div>`;
 
   try {
     const res = await fetch('/api/chat', {
@@ -37,7 +42,7 @@ async function runBuild() {
 
 function renderPlan(out, plan, car, goal) {
   const items = Array.isArray(plan.items) ? plan.items : [];
-  out.innerHTML = `<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px">PLAN FOR ${car.toUpperCase()} · ${goal.toUpperCase()}</div>`;
+  out.innerHTML = `<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px">PLAN FOR ${escapeHTML(car.toUpperCase())} · ${escapeHTML(goal.toUpperCase())}</div>`;
 
   if (plan.summary) {
     const s = document.createElement('div');
