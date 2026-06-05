@@ -1,104 +1,73 @@
-const sbHistory = [];
+// planner.js — BuildAI: calls the live /api/chat serverless function.
 
-function sbAdd(html, cls = 'msg-ai') {
-  const body = document.getElementById('sb-body');
-  const d = document.createElement('div');
-  d.className = 'msg ' + cls;
-  d.innerHTML = html;
-  body.appendChild(d);
-  body.scrollTop = body.scrollHeight;
-  return d;
-}
+document.querySelectorAll('#goals .gp').forEach(g => g.onclick = () => {
+  document.querySelectorAll('#goals .gp').forEach(x => x.classList.remove('active'));
+  g.classList.add('active');
+});
 
-function sbTyping() {
-  const body = document.getElementById('sb-body');
-  const d = document.createElement('div');
-  d.id = 'sb-typing';
-  d.className = 'msg msg-ai';
-  d.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
-  body.appendChild(d);
-  body.scrollTop = body.scrollHeight;
-}
+async function runBuild() {
+  const car = document.getElementById('car').value;
+  const goal = document.querySelector('#goals .gp.active').dataset.g;
+  const budget = document.getElementById('budget').value;
+  const out = document.getElementById('buildOut');
 
-function sbClear() {
-  const t = document.getElementById('sb-typing');
-  if (t) t.remove();
-}
-
-function showRecCard(cats) {
-  const recId = 'rec-' + Date.now();
-  const recEl = document.createElement('div');
-  recEl.className = 'msg msg-ai';
-  const card = document.createElement('div');
-  card.className = 'rec-card';
-  card.innerHTML = `
-    <div class="rec-title">Find these parts?</div>
-    <div class="rec-tags">${cats.map(c => `<span class="rec-tag">${c}</span>`).join('')}</div>
-    <div class="rec-acts" id="${recId}"></div>`;
-  recEl.appendChild(card);
-
-  const acts = card.querySelector('.rec-acts');
-  const yesBtn = document.createElement('button');
-  yesBtn.className = 'btn-yes';
-  yesBtn.textContent = 'Show in results';
-  yesBtn.onclick = () => {
-    pushAIResults(cats, cats[0]);
-    acts.innerHTML = '<span class="rec-confirmed">Pushed to results feed</span>';
-  };
-
-  const noBtn = document.createElement('button');
-  noBtn.className = 'btn-no';
-  noBtn.textContent = 'Dismiss';
-  noBtn.onclick = () => {
-    acts.innerHTML = '<span class="rec-dismissed">Dismissed</span>';
-  };
-
-  acts.appendChild(yesBtn);
-  acts.appendChild(noBtn);
-
-  document.getElementById('sb-body').appendChild(recEl);
-  document.getElementById('sb-body').scrollTop = 9999;
-}
-
-async function sbSend() {
-  const inp = document.getElementById('sb-input');
-  const val = inp.value.trim();
-  if (!val) return;
-  inp.value = '';
-  sbAdd(`<div class="bubble">${val}</div>`, 'msg msg-user');
-  sbHistory.push({ role: 'user', content: val });
-  sbTyping();
+  out.innerHTML = `<div class="ai-thinking"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> BuildAI is mapping your <b style="color:var(--text)">${car}</b> for <b style="color:var(--text)">${goal}</b><span class="blink">_</span></div>`;
 
   try {
-    const resp = await fetch('/api/chat', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: sbHistory }),
+      body: JSON.stringify({ car, goal, budget })
     });
 
-    const data = await resp.json();
-    sbClear();
-
-    if (!resp.ok) {
-      sbAdd(`<div class="bubble">Something went wrong: ${data.error || 'Unknown error'}. Try again.</div>`);
-      return;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `Request failed (${res.status})`);
     }
 
-    const text = data.content?.map(c => c.text || '').join('') || 'No response. Try again.';
-    const partsMatch = text.match(/<PARTS>(.*?)<\/PARTS>/s);
-    const cleanText = text.replace(/<PARTS>.*?<\/PARTS>/s, '').trim();
-
-    sbHistory.push({ role: 'assistant', content: text });
-    sbAdd(`<div class="bubble">${cleanText.replace(/\n/g, '<br>')}</div>`);
-
-    if (partsMatch) {
-      try {
-        const cats = JSON.parse(partsMatch[1]);
-        showRecCard(cats);
-      } catch (e) {}
-    }
-  } catch (e) {
-    sbClear();
-    sbAdd(`<div class="bubble">Couldn't reach the AI right now. Check your connection and try again.</div>`);
+    const plan = await res.json();
+    renderPlan(out, plan, car, goal);
+  } catch (err) {
+    out.innerHTML = `<div class="plan-empty">
+      <span class="big">⚠️</span>
+      <span>BuildAI couldn't reach the planner.<br><span style="font-family:var(--mono);font-size:12px;color:var(--muted)">${String(err.message)}</span></span>
+    </div>`;
   }
+}
+
+function renderPlan(out, plan, car, goal) {
+  const items = Array.isArray(plan.items) ? plan.items : [];
+  out.innerHTML = `<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px">PLAN FOR ${car.toUpperCase()} · ${goal.toUpperCase()}</div>`;
+
+  if (plan.summary) {
+    const s = document.createElement('div');
+    s.style.cssText = 'font-size:15px;color:var(--text);margin-bottom:8px;line-height:1.4';
+    s.textContent = plan.summary;
+    out.appendChild(s);
+  }
+
+  items.forEach((item, idx) => {
+    const el = document.createElement('div');
+    el.className = 'plan-item';
+    el.style.animationDelay = (idx * 0.1) + 's';
+    el.innerHTML = `<div class="num">${String(idx + 1).padStart(2, '0')}</div>
+      <div class="pi-body"><h5>${escapeHTML(item.part || '')}</h5><p>${escapeHTML(item.note || '')}</p></div>
+      <div class="pi-price">${escapeHTML(item.price || '')}</div>`;
+    out.appendChild(el);
+  });
+
+  const cta = document.createElement('button');
+  cta.className = 'build-btn';
+  cta.style.marginTop = '20px';
+  cta.textContent = 'Show matching parts in results →';
+  cta.onclick = () => {
+    renderResults([...CATALOGUE].sort(() => Math.random() - 0.5));
+    document.getElementById('results-sec').scrollIntoView({ behavior: 'smooth' });
+    toast('Pushed your build to results 🎯');
+  };
+  out.appendChild(cta);
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }

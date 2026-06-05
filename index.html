@@ -1,104 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PartHunter.ae — Find Car Parts Across the UAE</title>
-  <meta name="description" content="Search every UAE car parts source in one place. Dubizzle, Facebook Marketplace, Deep Performance, Bin Jumah, FMIC, and more." />
-  <meta name="google-site-verification" content="So9NQdfEUBV7abYPsJ4vahLDSkfdQTaa1sEstKrUJco" />
-  <meta name="keywords" content="car parts UAE, car parts Dubai, performance parts Dubai, JDM parts UAE, Nissan parts Dubai, buy car parts online UAE" />
-  <meta property="og:title" content="PartHunter.ae — Find Car Parts Across the UAE" />
-  <meta property="og:description" content="Search Dubizzle, Facebook Marketplace, Deep Performance, Bin Jumah and more — all in one place." />
-  <meta property="og:url" content="https://parthunter.ae" />
-  <meta property="og:type" content="website" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-70 -70 140 140'><rect x='-70' y='-70' width='140' height='140' fill='%230a0a0a'/><circle cx='0' cy='0' r='44' stroke='%23e63b1e' stroke-width='5' fill='none'/><circle cx='0' cy='0' r='9' fill='%23e63b1e'/><line x1='-44' y1='0' x2='-14' y2='0' stroke='%23e63b1e' stroke-width='5'/><line x1='14' y1='0' x2='44' y2='0' stroke='%23e63b1e' stroke-width='5'/><line x1='0' y1='-44' x2='0' y2='-14' stroke='%23e63b1e' stroke-width='5'/><line x1='0' y1='14' x2='0' y2='44' stroke='%23e63b1e' stroke-width='5'/></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PartHunter — Hunt Parts. Build Different.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="layout">
 
-    <div class="main">
-
-      <div class="hero">
-        <div class="logo">
-          <svg class="logo-icon" viewBox="-70 -70 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="0" cy="0" r="44" stroke="#e63b1e" stroke-width="5"/>
-            <circle cx="0" cy="0" r="9" fill="#e63b1e"/>
-            <line x1="-44" y1="0" x2="-14" y2="0" stroke="#e63b1e" stroke-width="5"/>
-            <line x1="14" y1="0" x2="44" y2="0" stroke="#e63b1e" stroke-width="5"/>
-            <line x1="0" y1="-44" x2="0" y2="-14" stroke="#e63b1e" stroke-width="5"/>
-            <line x1="0" y1="14" x2="0" y2="44" stroke="#e63b1e" stroke-width="5"/>
-            <line x1="-62" y1="-62" x2="-52" y2="-52" stroke="#e63b1e" stroke-width="3"/>
-            <line x1="52" y1="-52" x2="62" y2="-62" stroke="#e63b1e" stroke-width="3"/>
-            <line x1="-62" y1="62" x2="-52" y2="52" stroke="#e63b1e" stroke-width="3"/>
-            <line x1="52" y1="52" x2="62" y2="62" stroke="#e63b1e" stroke-width="3"/>
-          </svg>
-          <span class="logo-text">PART<span class="red">HUNTER</span><span class="ae">.ae</span></span>
-        </div>
-        <div class="tagline">Every UAE parts source. One search.</div>
-        <div class="search-bar">
-          <input type="text" id="ph-q" placeholder="e.g. S15 coilovers, RB25 intercooler, boost controller..." autocomplete="off" />
-          <button class="search-btn" onclick="doSearch()">
-            <i class="ti ti-search"></i> Search
-          </button>
-        </div>
-        <div class="interpreter" id="ph-interp"></div>
-        <div class="chips">
-          <div class="chip on" onclick="setChip(this,'all')">All</div>
-          <div class="chip" onclick="setChip(this,'new')">New only</div>
-          <div class="chip" onclick="setChip(this,'used')">Used only</div>
-          <div class="chip" onclick="setChip(this,'perf')">Performance shops</div>
-          <div class="chip" onclick="setChip(this,'class')">Classifieds</div>
-        </div>
-      </div>
-
-      <div class="sources-row">
-        <span class="sources-label">Live sources</span>
-        <div class="source-pill"><div class="dot used"></div>Dubizzle</div>
-        <div class="source-pill"><div class="dot used"></div>Facebook Marketplace</div>
-        <div class="source-pill"><div class="dot"></div>Deep Performance</div>
-        <div class="source-pill"><div class="dot"></div>Bin Jumah</div>
-        <div class="source-pill"><div class="dot"></div>FMIC UAE</div>
-        <div class="source-pill"><div class="dot"></div>Intraco</div>
-        <div class="source-pill"><div class="dot"></div>Atomic Shop</div>
-        <div class="source-pill"><div class="dot"></div>YP Performance</div>
-        <div class="source-pill"><div class="dot"></div>Prowayparts</div>
-      </div>
-
-      <div id="ph-feed">
-        <div class="empty">
-          <i class="ti ti-car"></i>
-          <p>Search for any part — engine, suspension, exterior, aero, brakes, anything.<br>Or ask the BuildAI planner what your car needs.</p>
-        </div>
-      </div>
-
+<nav>
+  <div class="wrap nav-in">
+    <div class="brand"><span class="logo"><span class="ring"></span><span class="crosshair"></span></span>PART<b>HUNTER</b></div>
+    <div class="nav-links">
+      <a onclick="document.getElementById('search').scrollIntoView()">Search</a>
+      <a onclick="document.getElementById('featured').scrollIntoView()">Featured</a>
+      <a onclick="document.getElementById('buildai').scrollIntoView()">BuildAI</a>
+      <a onclick="document.getElementById('feed').scrollIntoView()">Feed</a>
+      <button class="nav-cta" onclick="openSell()">Sell a part</button>
     </div>
-
-    <div class="sidebar">
-      <div class="sb-head">
-        <i class="ti ti-tool" style="color:#e63b1e;font-size:20px"></i>
-        <div>
-          <div class="sb-title">Build<span>AI</span></div>
-          <div class="sb-sub">Your personal build planner</div>
-        </div>
-      </div>
-      <div class="sb-body" id="sb-body"></div>
-      <div class="sb-input-row">
-        <input type="text" id="sb-input" placeholder="Reply..." />
-        <button class="send-btn" onclick="sbSend()" aria-label="Send">
-          <i class="ti ti-send"></i>
-        </button>
-      </div>
-    </div>
-
   </div>
+</nav>
 
-  <script src="data.js"></script>
-  <script src="search.js"></script>
-  <script src="planner.js"></script>
-  <script src="app.js"></script>
+<header class="hero">
+  <div class="wrap">
+    <span class="tag"><span class="dot"></span> UAE's car parts search engine</span>
+    <h1 class="title">HUNT PARTS.<br><em>BUILD</em> <span class="stroke">DIFFERENT.</span></h1>
+    <p class="sub">One search. Every UAE shop, marketplace, and seller. Tell us your car and your goal — BuildAI does the rest. No more 47 open tabs.</p>
+
+    <div class="search-shell" id="search">
+      <div class="search-box">
+        <span style="position:relative;width:18px;height:18px;display:inline-block"><span style="position:absolute;inset:10%;border:2px solid var(--red);border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:2px;height:100%;background:var(--red)"></span><span style="position:absolute;top:48%;left:0;height:2px;width:100%;background:var(--red)"></span></span>
+        <input id="searchInput" placeholder="e.g. cheap front mount intercooler for my RB25 S14 under 2k" />
+        <button onclick="runSearch()">Hunt</button>
+      </div>
+      <div class="chips">
+        <span class="chip" onclick="quickSearch('Single turbo kit RB25')">single turbo kit</span>
+        <span class="chip" onclick="quickSearch('Coilovers S14 budget')">budget coilovers</span>
+        <span class="chip" onclick="quickSearch('18 inch wheels')">18&quot; wheels</span>
+        <span class="chip" onclick="quickSearch('Front mount intercooler')">front mount</span>
+        <span class="chip" onclick="quickSearch('Fuel injectors 1000cc')">1000cc injectors</span>
+      </div>
+      <div class="interpret" id="interpret">
+        <div class="ai-row"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> AI understood your search</div>
+        <div class="typed" id="typed"></div>
+        <div class="meta" id="interpMeta"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="block reveal" id="featured">
+  <div class="wrap">
+    <div class="sec-top">
+      <div>
+        <div class="eyebrow">// Featured listings</div>
+        <h2 class="head">Featured parts</h2>
+        <p class="lead">Hand-picked stock from partner shops across the UAE. Want your inventory up here on the homepage? Get in touch.</p>
+      </div>
+      <button class="ghost-btn" onclick="document.getElementById('partner').scrollIntoView()">Feature your shop →</button>
+    </div>
+    <div class="results" id="featuredGrid"></div>
+  </div>
+</section>
+
+<section class="block reveal" id="results-sec">
+  <div class="wrap">
+    <div class="eyebrow">// Results</div>
+    <h2 class="head" id="resultsHead">Search across every UAE source</h2>
+    <p class="lead">Aggregated shop stock plus community listings. Used finds flagged in green, featured partner stock in gold.</p>
+    <div class="results" id="resultsGrid"></div>
+  </div>
+</section>
+
+<section class="block reveal" id="buildai">
+  <div class="wrap">
+    <div class="eyebrow">// Powered by Claude</div>
+    <h2 class="head">Don't know where to start?<br>BuildAI does.</h2>
+    <p class="lead">Pick your car, set a power goal, and get a prioritized parts plan with compatibility warnings — built live for your exact setup.</p>
+    <div class="buildai">
+      <div class="config">
+        <div class="field">
+          <label>Your car</label>
+          <select id="car">
+            <option>Nissan Silvia S14 / 240SX</option>
+            <option>Nissan Skyline R34 GT-T</option>
+            <option>Toyota Supra MK4</option>
+            <option>Mazda RX-7 FD</option>
+            <option>Subaru WRX STI</option>
+            <option>Honda Civic EK</option>
+            <option>BMW E46 M3</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Power goal</label>
+          <div class="goal-pills" id="goals">
+            <div class="gp" data-g="Daily / reliable">Daily</div>
+            <div class="gp active" data-g="400whp street">400whp</div>
+            <div class="gp" data-g="500whp+ track">Track</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Budget (AED)</label>
+          <input id="budget" type="text" value="15,000" />
+        </div>
+        <button class="build-btn" onclick="runBuild()"><span class="crosshair" style="width:16px;height:16px;position:relative"></span> Generate my build</button>
+      </div>
+      <div class="output" id="buildOut">
+        <div class="plan-empty">
+          <span class="big">🔧</span>
+          <span>Set your car + goal, then hit generate.<br>BuildAI maps your parts in real time.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block reveal">
+  <div class="wrap">
+    <div class="eyebrow">// The numbers</div>
+    <h2 class="head">Built by car people,<br>for car people.</h2>
+    <div class="stats">
+      <div class="stat"><div class="n" data-count="9">0</div><div class="l">Sources indexed</div></div>
+      <div class="stat"><div class="n" data-count="1">0</div><div class="l">Search, every shop</div></div>
+      <div class="stat"><div class="n" data-count="24">0</div><div class="l">Hours, always hunting</div></div>
+      <div class="stat"><div class="n" data-count="0">0</div><div class="l">Tabs you'll keep open</div></div>
+    </div>
+
+    <div class="partner-cta" id="partner">
+      <div class="pc-text">
+        <h4>Get your shop featured</h4>
+        <p>Featured slots put your parts on the PartHunter homepage and at the top of relevant searches — in front of UAE builders actively hunting for what you stock. Reach out to claim a slot.</p>
+      </div>
+      <button class="gold-btn" onclick="window.location.href='mailto:partner@parthunter.ae?subject=Featured%20listing%20enquiry'">partner@parthunter.ae</button>
+    </div>
+  </div>
+</section>
+
+<section class="block reveal" id="feed">
+  <div class="wrap">
+    <div class="eyebrow">// From the community</div>
+    <h2 class="head">Tag us. Get featured.</h2>
+    <p class="lead">Real builds, real finds, real prices. The UAE car scene lives here — drop your build and you might land on the homepage.</p>
+    <div class="feed">
+      <div class="post">
+        <div class="ph">🏎️</div>
+        <div class="pc">
+          <div class="ptop"><div class="av"><span style="position:relative;width:14px;height:14px;display:inline-block"><span style="position:absolute;inset:12%;border:1.5px solid #fff;border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:1.5px;height:100%;background:#fff"></span><span style="position:absolute;top:48%;left:0;height:1.5px;width:100%;background:#fff"></span></span></div><span class="un">@parthunter.ae</span></div>
+          <div class="cap">Scored a clean front-mount intercooler on Dubizzle for 1,400 under retail. The hunt never misses 🎯</div>
+          <div class="pmeta"><span><b>2.4k</b> likes</span><span><b>88</b> saves</span></div>
+        </div>
+      </div>
+      <div class="post">
+        <div class="ph">⚙️</div>
+        <div class="pc">
+          <div class="ptop"><div class="av"><span style="position:relative;width:14px;height:14px;display:inline-block"><span style="position:absolute;inset:12%;border:1.5px solid #fff;border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:1.5px;height:100%;background:#fff"></span><span style="position:absolute;top:48%;left:0;height:1.5px;width:100%;background:#fff"></span></span></div><span class="un">@parthunter.ae</span></div>
+          <div class="cap">POV: BuildAI just mapped a full 400whp S14 plan in seconds. Sourcing it yourself would've taken all weekend 💀</div>
+          <div class="pmeta"><span><b>5.1k</b> likes</span><span><b>312</b> saves</span></div>
+        </div>
+      </div>
+      <div class="post">
+        <div class="ph">🔥</div>
+        <div class="pc">
+          <div class="ptop"><div class="av"><span style="position:relative;width:14px;height:14px;display:inline-block"><span style="position:absolute;inset:12%;border:1.5px solid #fff;border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:1.5px;height:100%;background:#fff"></span><span style="position:absolute;top:48%;left:0;height:1.5px;width:100%;background:#fff"></span></span></div><span class="un">@parthunter.ae</span></div>
+          <div class="cap">Stop paying tourist prices for parts. One search beats 47 tabs. We said what we said.</div>
+          <div class="pmeta"><span><b>3.8k</b> likes</span><span><b>201</b> saves</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final reveal">
+  <div class="wrap">
+    <h2>QUIT SCROLLING.<br><span class="stroke">START HUNTING.</span></h2>
+    <button class="build-btn" onclick="document.getElementById('search').scrollIntoView()">Find my parts →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="brand"><span class="logo" style="position:relative;width:20px;height:20px"><span class="ring"></span><span class="crosshair"></span></span>PART<b>HUNTER</b></div>
+    <span class="muted">© 2026 PartHunter.ae — Made in the UAE 🇦🇪 · partner@parthunter.ae</span>
+  </div>
+</footer>
+
+<div class="modal" id="sellModal">
+  <div class="modal-card">
+    <button class="close" onclick="closeSell()">✕</button>
+    <h3>Sell a part</h3>
+    <p class="ms">List your part on PartHunter. Submissions are reviewed before going live.</p>
+    <div class="field"><label>Part title</label><input id="lTitle" placeholder="e.g. Garrett GTX3076R turbo" /></div>
+    <div class="row2">
+      <div class="field"><label>Car / fitment</label><input id="lCar" placeholder="e.g. RB25 S14" /></div>
+      <div class="field"><label>Price (AED)</label><input id="lPrice" placeholder="e.g. 3,500" /></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Condition</label>
+        <select id="lCondition"><option>Used</option><option>New</option><option>Refurbished</option></select>
+      </div>
+      <div class="field"><label>Contact (phone or email)</label><input id="lContact" placeholder="05X XXX XXXX" /></div>
+    </div>
+    <div class="field"><label>Link (optional)</label><input id="lLink" placeholder="Dubizzle / listing URL" /></div>
+    <div class="field"><label>Description (optional)</label><textarea id="lDesc" placeholder="Mileage, condition notes, why you're selling…"></textarea></div>
+    <button class="build-btn" onclick="submitListing()">Submit listing</button>
+    <div id="sellStatus"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Added to your build 🎯</div>
+
+<script src="data.js"></script>
+<script src="search.js"></script>
+<script src="planner.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
