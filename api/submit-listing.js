@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${resendKey}`
       },
       body: JSON.stringify({
-        from: 'PartHunter Listings <listings@parthunter.ae>',
+        from: 'PartHunter Listings <listings@mail.parthunter.ae>',
         to: 'partner@parthunter.ae',
         subject: `New listing: ${listing.title} (${listing.car})`,
         text:
