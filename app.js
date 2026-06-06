@@ -61,7 +61,7 @@ function toggleHow(btn) {
   if (!steps) return;
   const open = steps.classList.toggle('open');
   btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  btn.textContent = open ? 'Hide steps ↑' : 'Show the 3 steps ↓';
+  btn.textContent = open ? 'Hide ↑' : 'See how it works ↓';
 }
 
 // ---- Sell a part: modal + submission ----

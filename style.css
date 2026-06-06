@@ -8,6 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
+a{color:var(--text)}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
   background-size:54px 54px;opacity:.18;mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 80%)}
@@ -146,7 +147,13 @@ h2.head{font-family:var(--display);font-size:clamp(38px,6vw,68px);line-height:.9
 footer{border-top:1px solid var(--line);padding:40px 0;margin-top:40px}
 .foot-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
 .foot-in .brand{font-size:22px}
+.foot-contact{display:flex;flex-direction:column;gap:6px;text-align:right}
+.foot-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:2px}
+.foot-contact a{color:var(--text);text-decoration:none;font-size:15px;font-weight:500;transition:color .2s}
+.foot-contact a:hover{color:var(--red)}
+.foot-copy{display:block;margin-top:24px}
 footer .muted{color:var(--muted);font-size:13px}
+@media(max-width:720px){.foot-contact{text-align:left}.foot-copy{margin-top:18px}}
 
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--red);color:#fff;padding:13px 22px;border-radius:10px;font-weight:700;font-size:14px;z-index:99;transition:transform .35s cubic-bezier(.2,1.3,.4,1);box-shadow:0 12px 40px var(--red-glow)}
 .toast.show{transform:translateX(-50%) translateY(0)}
