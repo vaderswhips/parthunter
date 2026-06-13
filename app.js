@@ -11,7 +11,7 @@ async function loadLiveProducts() {
     const products = Array.isArray(data.products) ? data.products : [];
 
     // Populate the global arrays the rest of the site reads from.
-    FEATURED = products.filter(p => p.featured);
+    FEATURED = products.filter(p => p.featured).slice(0, 8);
     CATALOGUE = products.slice();
 
     renderFeatured();
