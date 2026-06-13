@@ -39,7 +39,7 @@
     <div class="search-shell" id="search">
       <div class="search-box">
         <span style="position:relative;width:18px;height:18px;display:inline-block"><span style="position:absolute;inset:10%;border:2px solid var(--red);border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:2px;height:100%;background:var(--red)"></span><span style="position:absolute;top:48%;left:0;height:2px;width:100%;background:var(--red)"></span></span>
-        <input id="searchInput" placeholder="e.g. cheap front mount intercooler for my RB25 S14 under 2k" />
+        <input id="searchInput" placeholder="e.g. cheap front mount intercooler for my RB25 S14 under 2k" onkeydown="if(event.key==='Enter')runSearch()" />
         <button onclick="runSearch()">Hunt</button>
       </div>
       <div class="chips">
