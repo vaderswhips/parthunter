@@ -1,10 +1,33 @@
 // app.js — boot, shared UI (toast, reveals, counters), and Sell-a-part submission.
 
-// Featured grid on load
-renderFeatured();
+// Load live products from partner shops' real feeds, then render.
+loadLiveProducts();
+async function loadLiveProducts() {
+  const grid = document.getElementById('featuredGrid');
+  if (grid) grid.innerHTML = '<div class="feed-loading">Loading live parts…</div>';
+  try {
+    const res = await fetch('/api/shops');
+    const data = await res.json();
+    const products = Array.isArray(data.products) ? data.products : [];
+
+    // Populate the global arrays the rest of the site reads from.
+    FEATURED = products.filter(p => p.featured);
+    CATALOGUE = products.slice();
+
+    renderFeatured();
+  } catch (e) {
+    if (grid) grid.innerHTML = '<div class="feed-loading">Couldn’t load live parts right now. Please refresh.</div>';
+  }
+}
+
 function renderFeatured() {
   const grid = document.getElementById('featuredGrid');
-  if (grid) grid.innerHTML = FEATURED.map(cardHTML).join('');
+  if (!grid) return;
+  if (!FEATURED.length) {
+    grid.innerHTML = '<div class="feed-loading">No featured parts yet — check back soon.</div>';
+    return;
+  }
+  grid.innerHTML = FEATURED.map(cardHTML).join('');
 }
 
 // Toast
