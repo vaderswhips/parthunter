@@ -117,6 +117,21 @@ h2.head{font-family:var(--display);font-size:clamp(38px,6vw,68px);line-height:.9
 .plan-empty{color:var(--muted);font-size:15px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:280px;text-align:center;gap:10px}
 .plan-empty .big{font-size:42px}
 
+/* BuildAI conversational follow-up */
+.buildchat{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}
+.chat-log{display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;margin-bottom:14px}
+.chat-log:empty{display:none}
+.chat-msg{padding:11px 15px;border-radius:12px;font-size:14px;line-height:1.5;max-width:85%;white-space:pre-wrap}
+.chat-msg.user{align-self:flex-end;background:var(--red);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg);border:1px solid var(--line);color:var(--text);border-bottom-left-radius:4px}
+.chat-msg.pending{color:var(--muted);font-family:var(--mono)}
+.chat-input{display:flex;gap:10px}
+.chat-input input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:13px 15px;color:var(--text);font-family:var(--body);font-size:15px;outline:none;transition:border-color .2s}
+.chat-input input:focus{border-color:var(--red)}
+.chat-input button{background:var(--red);color:#fff;border:none;border-radius:10px;padding:0 22px;font-weight:700;font-family:var(--body);cursor:pointer;font-size:15px;transition:transform .15s}
+.chat-input button:hover{transform:scale(1.04)}
+.chat-note{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:10px;letter-spacing:.5px}
+
 .partner-cta{margin-top:28px;background:linear-gradient(120deg,rgba(245,196,81,.08),transparent);border:1px solid var(--gold-deep);border-radius:14px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
 .partner-cta .pc-text h4{font-family:var(--display);font-size:26px;letter-spacing:.5px;color:var(--gold)}
 .partner-cta .pc-text p{color:var(--muted);font-size:14px;margin-top:4px;max-width:520px}

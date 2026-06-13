@@ -116,7 +116,7 @@
   <div class="wrap">
     <div class="eyebrow">// Powered by Claude</div>
     <h2 class="head">Don't know where to start?<br>BuildAI does.</h2>
-    <p class="lead">Pick your car, set a power goal, and get a prioritized parts plan with compatibility warnings — built live for your exact setup.</p>
+    <p class="lead">Pick your car, choose a direction, and get a prioritized parts plan built live for your exact platform — then ask BuildAI follow-ups.</p>
     <div class="buildai">
       <div class="config">
         <div class="field">
@@ -133,11 +133,12 @@
           </datalist>
         </div>
         <div class="field">
-          <label>Power goal</label>
+          <label>Build direction</label>
           <div class="goal-pills" id="goals">
-            <div class="gp" data-g="Daily / reliable">Daily</div>
-            <div class="gp active" data-g="400whp street">400whp</div>
-            <div class="gp" data-g="500whp+ track">Track</div>
+            <div class="gp active" data-g="Street &amp; reliable — solid daily setup">Street</div>
+            <div class="gp" data-g="More power — meaningful gains over its current output">More power</div>
+            <div class="gp" data-g="Track-focused — handling, braking, and track capability">Track</div>
+            <div class="gp" data-g="Show &amp; styling — looks, stance, and presence">Styling</div>
           </div>
         </div>
         <div class="field">
@@ -149,9 +150,17 @@
       <div class="output" id="buildOut">
         <div class="plan-empty">
           <span class="big">🔧</span>
-          <span>Set your car + goal, then hit generate.<br>BuildAI maps your parts in real time.</span>
+          <span>Set your car + direction, then hit generate.<br>BuildAI maps your parts in real time.</span>
         </div>
       </div>
+    </div>
+    <div class="buildchat" id="buildChat" style="display:none">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-input">
+        <input id="chatInput" type="text" placeholder="Ask BuildAI about your build…" onkeydown="if(event.key==='Enter')sendBuildChat()" maxlength="300" />
+        <button onclick="sendBuildChat()">Ask</button>
+      </div>
+      <div class="chat-note">BuildAI only answers car &amp; parts questions.</div>
     </div>
   </div>
 </section>

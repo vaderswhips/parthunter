@@ -1,5 +1,8 @@
 // planner.js — BuildAI: calls the live /api/chat serverless function.
 
+let BUILD_CONTEXT = { car: '', goal: '', budget: '' };
+let CHAT_HISTORY = [];
+
 document.querySelectorAll('#goals .gp').forEach(g => g.onclick = () => {
   document.querySelectorAll('#goals .gp').forEach(x => x.classList.remove('active'));
   g.classList.add('active');
@@ -16,13 +19,16 @@ async function runBuild() {
     return;
   }
 
-  out.innerHTML = `<div class="ai-thinking"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> BuildAI is mapping your <b style="color:var(--text)">${escapeHTML(car)}</b> for <b style="color:var(--text)">${escapeHTML(goal)}</b><span class="blink">_</span></div>`;
+  BUILD_CONTEXT = { car, goal, budget };
+  CHAT_HISTORY = [];
+
+  out.innerHTML = `<div class="ai-thinking"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> BuildAI is mapping your <b style="color:var(--text)">${escapeHTML(car)}</b><span class="blink">_</span></div>`;
 
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ car, goal, budget })
+      body: JSON.stringify({ mode: 'plan', car, goal, budget })
     });
 
     if (!res.ok) {
@@ -32,6 +38,13 @@ async function runBuild() {
 
     const plan = await res.json();
     renderPlan(out, plan, car, goal);
+
+    // Reveal the conversational follow-up box now that a plan exists.
+    const chat = document.getElementById('buildChat');
+    if (chat) {
+      chat.style.display = '';
+      document.getElementById('chatLog').innerHTML = '';
+    }
   } catch (err) {
     out.innerHTML = `<div class="plan-empty">
       <span class="big">⚠️</span>
@@ -75,4 +88,52 @@ function renderPlan(out, plan, car, goal) {
 
 function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ---- BuildAI conversational follow-up ----
+async function sendBuildChat() {
+  const input = document.getElementById('chatInput');
+  const log = document.getElementById('chatLog');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  // Append user message
+  log.insertAdjacentHTML('beforeend', `<div class="chat-msg user">${escapeHTML(msg)}</div>`);
+  input.value = '';
+  log.scrollTop = log.scrollHeight;
+
+  // Typing indicator
+  log.insertAdjacentHTML('beforeend', `<div class="chat-msg ai pending">…</div>`);
+  log.scrollTop = log.scrollHeight;
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'chat',
+        car: BUILD_CONTEXT.car,
+        goal: BUILD_CONTEXT.goal,
+        budget: BUILD_CONTEXT.budget,
+        history: CHAT_HISTORY,
+        message: msg
+      })
+    });
+    const data = await res.json();
+    const reply = (data && data.reply) ? data.reply : "I'm BuildAI — I only help with car builds and parts. Ask me about your build.";
+
+    // Replace pending with real reply
+    const pending = log.querySelector('.chat-msg.pending');
+    if (pending) { pending.classList.remove('pending'); pending.textContent = reply; }
+
+    // Track history for context (capped server-side too)
+    CHAT_HISTORY.push({ role: 'user', content: msg });
+    CHAT_HISTORY.push({ role: 'assistant', content: reply });
+    if (CHAT_HISTORY.length > 12) CHAT_HISTORY = CHAT_HISTORY.slice(-12);
+
+    log.scrollTop = log.scrollHeight;
+  } catch (err) {
+    const pending = log.querySelector('.chat-msg.pending');
+    if (pending) { pending.classList.remove('pending'); pending.textContent = 'Couldn’t reach BuildAI. Try again.'; }
+  }
 }
