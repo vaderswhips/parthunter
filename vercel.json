@@ -2,6 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/chat.js": { "maxDuration": 30 },
-    "api/submit-listing.js": { "maxDuration": 15 }
+    "api/submit-listing.js": { "maxDuration": 15 },
+    "api/moderate.js": { "maxDuration": 15 },
+    "api/listings.js": { "maxDuration": 15 }
   }
 }
