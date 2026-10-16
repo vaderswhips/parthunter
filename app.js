@@ -6,13 +6,19 @@ async function loadLiveProducts() {
   const grid = document.getElementById('featuredGrid');
   if (grid) grid.innerHTML = Array.from({length:8},()=>'<div class="skel"><div class="img"></div><div class="l"></div><div class="l s"></div><div class="l p"></div></div>').join('');
   try {
-    const res = await fetch('/api/shops');
-    const data = await res.json();
-    const products = Array.isArray(data.products) ? data.products : [];
+    const [shopRes, listRes] = await Promise.all([
+      fetch('/api/shops'),
+      fetch('/api/listings').catch(() => null)
+    ]);
+    const shopData = await shopRes.json();
+    const listData = listRes && listRes.ok ? await listRes.json().catch(() => ({})) : {};
+    const products = Array.isArray(shopData.products) ? shopData.products : [];
+    const community = Array.isArray(listData.products) ? listData.products : [];
 
     // Populate the global arrays the rest of the site reads from.
+    // Featured = partner shop stock only. Catalogue = shops + approved community listings.
     FEATURED = products.filter(p => p.featured).slice(0, 8);
-    CATALOGUE = products.slice();
+    CATALOGUE = [...products, ...community];
 
     renderFeatured();
   } catch (e) {
@@ -123,25 +129,14 @@ async function submitListing() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Submission failed');
 
-    // Show it in this session's results immediately
-    USER_LISTINGS.unshift({
-      n: payload.title,
-      src: 'Community listing',
-      price: payload.price.replace(/[^\d.,]/g, '') || payload.price,
-      emoji: null,
-      condition: payload.condition || 'Used'
-    });
-
-    status.textContent = 'Submitted. It\'s pending review and now showing in your results.';
+    // Nothing is published yet. It sits in the review queue until approved.
+    status.textContent = data.note
+      ? 'Received. ' + data.note
+      : 'Submitted. We review every listing before it goes live, usually within a day.';
     status.style.color = 'var(--text-2)';
-    toast('Listing submitted');
-    setTimeout(() => {
-      closeSell();
-      renderResults([...USER_LISTINGS, ...CATALOGUE]);
-      document.getElementById('resultsHead').textContent = 'Latest listings';
-      document.getElementById('results-sec').scrollIntoView({ behavior: 'smooth' });
-      status.textContent = '';
-    }, 1100);
+    toast('Listing submitted for review');
+    ['lTitle','lCar','lPrice','lContact','lLink','lDesc'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    setTimeout(() => { closeSell(); status.textContent = ''; }, 2600);
   } catch (err) {
     status.textContent = err.message;
     status.style.color = 'var(--red)';

@@ -21,9 +21,9 @@ function cardHTML(p) {
     : `<div class="price enquire">Enquire for price</div>`;
 
   const arrow = `<svg viewBox="0 0 16 16"><path d="M4 12 12 4M6 4h6v6"/></svg>`;
-  const linkLabel = url
-    ? (p.src ? 'View on ' + escapeHTML(p.src) + arrow : 'View listing' + arrow)
-    : 'Community listing';
+  const linkLabel = p.community
+    ? (url ? 'Contact seller' + arrow : 'Community listing')
+    : url ? 'View on ' + escapeHTML(p.src) + arrow : 'View listing';
 
   const inner = `
     <div class="img">${badge}${visual}</div>
