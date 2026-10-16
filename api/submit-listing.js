@@ -5,25 +5,13 @@
 // approve / reject links goes out if Resend is configured.
 //
 // Env vars (Vercel → Settings → Environment Variables):
-//   UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN  — listing storage (Upstash free tier)
+//   Redis connection vars — created automatically by Vercel → Storage → Create Database → Redis
 //   ADMIN_KEY                                          — secret that unlocks the admin page
 //   RESEND_API_KEY                                     — optional, for the notification email
 
 import { createHmac } from 'crypto';
+import { db, configured } from './_db.js';
 
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-
-async function redis(...cmd) {
-  const r = await fetch(REDIS_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(cmd)
-  });
-  const j = await r.json();
-  if (j.error) throw new Error(j.error);
-  return j.result;
-}
 
 function token(id, action) {
   return createHmac('sha256', process.env.ADMIN_KEY || 'no-key').update(`${id}:${action}`).digest('hex').slice(0, 32);
@@ -60,13 +48,13 @@ export default async function handler(req, res) {
   };
 
   // ---- store as pending ----
-  if (!REDIS_URL || !REDIS_TOKEN) {
+  if (!configured) {
     console.log('LISTING (storage not configured, not saved):', JSON.stringify(listing));
     return res.status(200).json({ ok: true, pending: true, note: 'Received, but storage is not configured yet so it was not saved.' });
   }
   try {
-    await redis('SET', `listing:${id}`, JSON.stringify(listing));
-    await redis('ZADD', 'listings:pending', Date.now(), id);
+    await db.set(`listing:${id}`, JSON.stringify(listing));
+    await db.zadd('listings:pending', Date.now(), id);
   } catch (e) {
     console.error('redis error', e);
     return res.status(500).json({ error: 'Could not save the listing. Try again in a moment.' });

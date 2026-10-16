@@ -7,21 +7,9 @@
 // never travels in email. Everything is GET so the links work from a phone.
 
 import { createHmac, timingSafeEqual } from 'crypto';
+import { db, configured, loadListings } from './_db.js';
 
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 const ADMIN_KEY = process.env.ADMIN_KEY || '';
-
-async function redis(...cmd) {
-  const r = await fetch(REDIS_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(cmd)
-  });
-  const j = await r.json();
-  if (j.error) throw new Error(j.error);
-  return j.result;
-}
 
 function token(id, action) {
   return createHmac('sha256', ADMIN_KEY || 'no-key').update(`${id}:${action}`).digest('hex').slice(0, 32);
@@ -32,13 +20,6 @@ function safeEq(a = '', b = '') {
 }
 function esc(s = '') {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-async function fetchList(zset) {
-  const ids = await redis('ZRANGE', zset, 0, -1, 'REV');
-  if (!ids || !ids.length) return [];
-  const raws = await redis('MGET', ...ids.map(i => `listing:${i}`));
-  return raws.map(r => { try { return JSON.parse(r); } catch { return null; } }).filter(Boolean);
 }
 
 function page(title, body) {
@@ -86,8 +67,8 @@ export default async function handler(req, res) {
   if (!ADMIN_KEY) {
     return res.status(500).send(page('Setup needed', `<h1>Admin key not set</h1><div class="note">Add an <code>ADMIN_KEY</code> environment variable in Vercel (any long random string), redeploy, then open <code>/api/moderate?key=YOUR_KEY</code>.</div>`));
   }
-  if (!REDIS_URL || !REDIS_TOKEN) {
-    return res.status(500).send(page('Setup needed', `<h1>Storage not configured</h1><div class="note">Add <code>UPSTASH_REDIS_REST_URL</code> and <code>UPSTASH_REDIS_REST_TOKEN</code> from your Upstash Redis database to Vercel, then redeploy.</div>`));
+  if (!configured) {
+    return res.status(500).send(page('Setup needed', `<h1>Storage not connected</h1><div class="note">No Redis connection found. In Vercel open this project → <b>Storage</b>, make sure the Redis store is <b>connected to this project</b> (it should add a <code>REDIS_URL</code> variable under Settings → Environment Variables), then redeploy.</div>`));
   }
 
   // ---- authorise: either the admin key, or a valid per-listing token for this exact action ----
@@ -101,16 +82,16 @@ export default async function handler(req, res) {
   if (id && action) {
     try {
       if (action === 'approve') {
-        const raw = await redis('GET', `listing:${id}`);
+        const raw = await db.get(`listing:${id}`);
         if (!raw) throw new Error('Listing not found (maybe already handled).');
         const l = JSON.parse(raw); l.status = 'approved'; l.approvedAt = new Date().toISOString();
-        await redis('SET', `listing:${id}`, JSON.stringify(l));
-        await redis('ZREM', 'listings:pending', id);
-        await redis('ZADD', 'listings:approved', Date.now(), id);
+        await db.set(`listing:${id}`, JSON.stringify(l));
+        await db.zrem('listings:pending', id);
+        await db.zadd('listings:approved', Date.now(), id);
       } else if (action === 'reject' || action === 'delete') {
-        await redis('ZREM', 'listings:pending', id);
-        await redis('ZREM', 'listings:approved', id);
-        await redis('DEL', `listing:${id}`);
+        await db.zrem('listings:pending', id);
+        await db.zrem('listings:approved', id);
+        await db.del(`listing:${id}`);
       } else {
         throw new Error('Unknown action.');
       }
@@ -125,7 +106,7 @@ export default async function handler(req, res) {
   // ---- admin page ----
   if (!byKey) return res.status(401).send(page('Not allowed', `<h1>Not allowed</h1>`));
   let pending = [], live = [];
-  try { [pending, live] = await Promise.all([fetchList('listings:pending'), fetchList('listings:approved')]); }
+  try { [pending, live] = await Promise.all([loadListings('listings:pending'), loadListings('listings:approved')]); }
   catch (e) { return res.status(500).send(page('Error', `<h1>Storage error</h1><div class="note">${esc(e.message)}</div>`)); }
 
   const k = encodeURIComponent(key);

@@ -1,19 +1,7 @@
 // api/listings.js — approved community listings as PartHunter cards (Vercel)
 // Only listings approved on /api/moderate appear here. Pending ones never do.
+import { configured, loadListings } from './_db.js';
 
-const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
-const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
-
-async function redis(...cmd) {
-  const r = await fetch(REDIS_URL, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(cmd)
-  });
-  const j = await r.json();
-  if (j.error) throw new Error(j.error);
-  return j.result;
-}
 
 // Buyers reach the seller through whatever they gave us: a listing link,
 // a WhatsApp number, or an email.
@@ -37,14 +25,11 @@ function formatPrice(p) {
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
-  if (!REDIS_URL || !REDIS_TOKEN) return res.status(200).json({ products: [], note: 'storage not configured' });
+  if (!configured) return res.status(200).json({ products: [], note: 'storage not configured' });
 
   try {
-    const ids = await redis('ZRANGE', 'listings:approved', 0, -1, 'REV');
-    if (!ids || !ids.length) return res.status(200).json({ products: [] });
-    const raws = await redis('MGET', ...ids.map(i => `listing:${i}`));
-    const products = raws
-      .map(r => { try { return JSON.parse(r); } catch { return null; } })
+    const all = await loadListings('listings:approved');
+    const products = all
       .filter(l => l && l.status === 'approved')
       .map(l => ({
         n: `${l.title} — ${l.car}`,
