@@ -37,7 +37,8 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:calc(88px + env(safe-area-inset-top))}
+html.focus{scroll-padding-top:0}
 body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:400;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -57,7 +58,7 @@ img,svg{display:block;max-width:100%}
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 main,header,section,footer{position:relative;z-index:1}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(var(--gutter),env(safe-area-inset-right)) 0 max(var(--gutter),env(safe-area-inset-left))}
 
 /* ============================================================
    DOUBLE BEZEL — every major container is a core sitting in a shell
@@ -101,7 +102,7 @@ main,header,section,footer{position:relative;z-index:1}
 /* ============================================================
    ISLAND NAV
    ============================================================ */
-.island{position:fixed;top:22px;left:50%;transform:translateX(-50%);z-index:var(--z-nav);
+.island{position:fixed;top:calc(22px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:var(--z-nav);
   display:flex;align-items:center;gap:6px;padding:6px 6px 6px 14px;border-radius:999px;
   background:rgba(12,12,14,.62);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);
   border:1px solid var(--hair);box-shadow:inset 0 1px 0 var(--hi),0 20px 60px -20px rgba(0,0,0,.8);
@@ -385,7 +386,7 @@ footer{border-top:1px solid var(--hair-soft);padding:40px 0 calc(32px + env(safe
   .slot.wide{grid-column:span 2}
 }
 @media (max-width:760px){
-  .island{top:12px;padding:5px 5px 5px 12px;gap:4px}
+  .island{top:calc(10px + env(safe-area-inset-top));padding:5px 5px 5px 12px;gap:4px}
   .island .links{display:none}
   .island .pill-sm{display:none}
   .burger{display:block}
@@ -453,7 +454,7 @@ html.focus .grid.collapsed{max-height:none;-webkit-mask-image:none;mask-image:no
 html.focus .reveal{opacity:1;transform:none;filter:none}   /* snapping + blur-reveal fight; let snap win */
 
 /* section indicator */
-.dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:var(--z-nav);display:none;flex-direction:column;gap:12px}
+.dots{position:fixed;right:max(22px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);z-index:var(--z-nav);display:none;flex-direction:column;gap:12px}
 html.focus .dots{display:flex}
 .dots button{width:22px;height:22px;display:grid;place-items:center;position:relative}
 .dots button::before{content:"";width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.22);transition:transform .6s var(--ease),background .6s var(--ease)}
@@ -481,7 +482,7 @@ html.focus .dots{display:flex}
    SHORT LANDSCAPE — folded Duo landscape, small laptops in split view
    (wide but under ~650px tall). Keep the console beside the headline.
    ============================================================ */
-@media (min-aspect-ratio:13/10) and (max-height:650px){
+@media (min-aspect-ratio:13/10) and (max-height:650px) and (min-width:760px){
   .hero{min-height:auto;padding:84px 0 44px}
   .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
   .hero h1{font-size:clamp(34px,4.6vw,48px);line-height:.96}
@@ -501,16 +502,85 @@ html.focus .dots{display:flex}
   .sec{padding:72px 0 80px}
   .sec-head{margin-bottom:28px}
   .sec-head h2{font-size:clamp(30px,4vw,40px)}
-  .island{top:12px}
+  .island{top:calc(10px + env(safe-area-inset-top))}
   html.focus .hero,html.focus .sec,html.focus .final{padding-top:80px;padding-bottom:32px}
   html.focus .grid.collapsed > .card:nth-child(n+4){display:none}   /* 3 cards fit one short row */
 }
 
-/* portrait tablet-ish (unfolded Duo portrait): give the stacked headline more presence */
-@media (min-width:761px) and (max-width:960px) and (orientation:portrait){
-  .hero h1{font-size:clamp(56px,8.4vw,82px)}
-  .hero-sub{font-size:18px}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* ============================================================
+   iPHONE DUO — exact logical sizes
+   unfolded 626×890 / 890×626 · folded 466×678 / 678×466
+   ============================================================ */
+
+/* Unfolded portrait (≈600–760 wide): a wide phone. Keep the hamburger, use the width. */
+@media (min-width:600px) and (max-width:760px) and (orientation:portrait){
+  .hero{padding:112px 0 64px}
+  .hero h1{font-size:clamp(58px,11vw,72px)}
+  .hero-sub{font-size:17px;max-width:44ch}
+  .stats{gap:34px}
+  .q{flex-wrap:nowrap}
+  .q input{width:auto;padding:0}
+  .q .pill{width:auto}
+  .console-foot{grid-template-columns:repeat(4,1fr)}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .bento{grid-template-columns:1fr 1fr}
+  .span-7{grid-column:1/-1}
+  .span-5{grid-column:auto}
+  .wall{grid-template-columns:repeat(2,1fr)}
+  .qa div{grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:18px}
+  .sec-head.split{flex-direction:row;align-items:flex-end}
+}
+
+/* Folded portrait (466×678): a short, chunky phone. Tighten vertical rhythm so the console is reachable. */
+@media (max-width:520px) and (max-height:720px) and (orientation:portrait){
+  .hero{padding:92px 0 44px}
+  .hero h1{font-size:clamp(44px,12.5vw,58px)}
+  .hero-sub{font-size:15px;margin-top:14px}
+  .stats{margin-top:26px;gap:22px}
+  .stats dd{font-size:28px}
+  .console-body{padding:16px}
+  .chips{margin-top:12px}
+  .console-foot{display:none}
+  .sec{padding:64px 0 76px}
+  .sec-head{margin-bottom:28px}
+  html.focus .hero,html.focus .sec,html.focus .final{padding-top:84px;padding-bottom:28px}
+}
+
+/* Folded landscape (678×466): very short and narrow-ish. Single column, everything compact, no 100dvh hero. */
+@media (max-width:760px) and (max-height:520px) and (orientation:landscape){
+  .hero{min-height:auto;padding:76px 0 36px}
+  .hero-grid{grid-template-columns:1fr;gap:22px}
+  .hero h1{font-size:clamp(34px,6vw,42px);line-height:.96}
+  .hero-sub{font-size:14px;margin-top:10px;max-width:50ch}
+  .stats{margin-top:18px;gap:22px}
+  .stats dd{font-size:24px}
+  .stats dt{font-size:10px;margin-top:4px}
+  .console-bar{padding:9px 14px}
+  .console-body{padding:12px 14px}
+  .q{margin-top:8px;padding-bottom:8px;flex-wrap:nowrap}
+  .q input{width:auto;padding:0;font-size:15px}
+  .q .pill{width:auto;padding:8px 8px 8px 16px;font-size:14px}
+  .q .pill .pill-ic{width:26px;height:26px}
+  .chips{display:none}
+  .console-foot{display:none}
+  .island{top:calc(8px + env(safe-area-inset-top))}
+  .sec{padding:56px 0 64px}
+  .sec-head{margin-bottom:22px}
+  .sec-head h2{font-size:clamp(28px,5vw,36px)}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .card .price{font-size:20px}
+  html.focus .hero,html.focus .sec,html.focus .final{min-height:100dvh;padding-top:68px;padding-bottom:24px}
+  html.focus .grid.collapsed > .card:nth-child(n+4){display:none}
+  .dots{gap:8px}
+}
+
+/* Half-folded "tabletop" posture (flip hinge across the middle, two vertical segments):
+   keep the headline on the upper half and start the console on the lower half. */
+@media (vertical-viewport-segments:2){
+  .hero{min-height:auto;padding-top:calc(env(safe-area-inset-top) + 72px)}
+  .hero-grid{grid-template-columns:1fr;gap:0}
+  .hero-copy{min-height:calc(env(viewport-segment-bottom 0 0) - env(safe-area-inset-top) - 72px);display:flex;flex-direction:column;justify-content:center;padding-bottom:16px}
+  .hero-console{padding-top:calc(env(viewport-segment-top 0 1) - env(viewport-segment-bottom 0 0) + 16px)}
 }
 
 /* dot labels: hover anywhere, pinned-open only when there's room */
