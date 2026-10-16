@@ -2,287 +2,339 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PartHunter — Hunt Parts. Build Different.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PartHunter — Find the part. Skip the chase.</title>
+<meta name="description" content="The UAE car parts search engine. One search across every shop, marketplace and seller, plus BuildAI to plan your build.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:title" content="PartHunter.ae — Every UAE source. One search.">
 <meta property="og:description" content="The UAE car parts search engine. One search across every shop, marketplace, and seller — plus BuildAI to plan your build.">
 <meta property="og:image" content="https://parthunter.ae/logo-square.jpg">
 <meta property="og:url" content="https://parthunter.ae">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#050505">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a class="skip" href="#search">Skip to search</a>
+<div class="mesh" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 
-<nav>
-  <div class="wrap nav-in">
-    <div class="brand"><svg class="scope-icon" viewBox="-120 -120 240 240" fill="none" stroke="currentColor" aria-hidden="true"><circle r="80" stroke-width="4"/><circle r="48" stroke-width="1" stroke-dasharray="5 7"/><circle r="8" fill="currentColor" stroke="none"/><line x1="-80" x2="-22" stroke-width="4"/><line x1="22" x2="80" stroke-width="4"/><line y1="-80" y2="-22" stroke-width="4"/><line y1="22" y2="80" stroke-width="4"/><line x1="-108" y1="-108" x2="-90" y2="-90" stroke-width="2.5"/><line x1="90" y1="-90" x2="108" y2="-108" stroke-width="2.5"/><line x1="-108" y1="108" x2="-90" y2="90" stroke-width="2.5"/><line x1="90" y1="90" x2="108" y2="108" stroke-width="2.5"/></svg>PART<b>HUNTER</b></div>
-    <div class="nav-links">
-      <a onclick="document.getElementById('search').scrollIntoView()">Search</a>
-      <a onclick="document.getElementById('how').scrollIntoView()">How it works</a>
-      <a onclick="document.getElementById('buildai').scrollIntoView()">BuildAI</a>
-      <a onclick="document.getElementById('shopfaq').scrollIntoView()">For shops</a>
-      <button class="nav-cta" onclick="openSell()">Sell a part</button>
-    </div>
+<!-- Floating island nav -->
+<nav class="island" id="nav" aria-label="Primary">
+  <a class="mark" href="#top" aria-label="PartHunter home">
+    <svg viewBox="-120 -120 240 240" fill="none" stroke="currentColor" aria-hidden="true"><circle r="80" stroke-width="7"/><circle r="48" stroke-width="2" stroke-dasharray="5 7"/><circle r="9" fill="currentColor" stroke="none"/><line x1="-80" x2="-24" stroke-width="7"/><line x1="24" x2="80" stroke-width="7"/><line y1="-80" y2="-24" stroke-width="7"/><line y1="24" y2="80" stroke-width="7"/></svg>
+    <span>PartHunter</span>
+  </a>
+  <div class="links">
+    <a onclick="document.getElementById('how').scrollIntoView()">How it works</a>
+    <a onclick="document.getElementById('buildai').scrollIntoView()">BuildAI</a>
+    <a onclick="document.getElementById('shopfaq').scrollIntoView()">For shops</a>
   </div>
+  <button class="pill pill-sm" onclick="openSell()"><span>Sell a part</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M4 12 12 4M6 4h6v6"/></svg></i></button>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu" onclick="toggleMenu()"><span></span><span></span></button>
 </nav>
 
-<header class="hero">
-  <div class="wrap">
-    <span class="tag"><span class="dot"></span> UAE's car parts search engine</span>
-    <h1 class="title">HUNT PARTS.<br><em>BUILD</em> <span class="stroke">DIFFERENT.</span></h1>
-    <p class="sub">One search. Every UAE shop, marketplace, and seller. Tell us your car and your goal — BuildAI does the rest. No more 47 open tabs.</p>
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu-in">
+    <a style="--i:0" onclick="toggleMenu();document.getElementById('search').scrollIntoView()">Search</a>
+    <a style="--i:1" onclick="toggleMenu();document.getElementById('how').scrollIntoView()">How it works</a>
+    <a style="--i:2" onclick="toggleMenu();document.getElementById('buildai').scrollIntoView()">BuildAI</a>
+    <a style="--i:3" onclick="toggleMenu();document.getElementById('shopfaq').scrollIntoView()">For shops</a>
+    <a style="--i:4" onclick="toggleMenu();openSell()">Sell a part</a>
+    <div class="menu-foot" style="--i:5"><span>partner@parthunter.ae</span><span>@parthunter.ae</span></div>
+  </div>
+</div>
 
-    <div class="search-shell" id="search">
-      <div class="search-box">
-        <span style="position:relative;width:18px;height:18px;display:inline-block"><span style="position:absolute;inset:10%;border:2px solid var(--red);border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:2px;height:100%;background:var(--red)"></span><span style="position:absolute;top:48%;left:0;height:2px;width:100%;background:var(--red)"></span></span>
-        <input id="searchInput" placeholder="e.g. cheap front mount intercooler for my RB25 S14 under 2k" onkeydown="if(event.key==='Enter')runSearch()" />
-        <button onclick="runSearch()">Hunt</button>
-      </div>
-      <div class="chips">
-        <span class="chip" onclick="quickSearch('Single turbo kit RB25')">single turbo kit</span>
-        <span class="chip" onclick="quickSearch('Coilovers S14 budget')">budget coilovers</span>
-        <span class="chip" onclick="quickSearch('18 inch wheels')">18&quot; wheels</span>
-        <span class="chip" onclick="quickSearch('Front mount intercooler')">front mount</span>
-        <span class="chip" onclick="quickSearch('Fuel injectors 1000cc')">1000cc injectors</span>
-      </div>
-      <div class="interpret" id="interpret">
-        <div class="ai-row"><span class="crosshair" style="width:14px;height:14px;position:relative"></span> AI understood your search</div>
-        <div class="typed" id="typed"></div>
-        <div class="meta" id="interpMeta"></div>
+<main id="top">
+
+<!-- ================= HERO : editorial split ================= -->
+<header class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">UAE car parts search</span>
+      <h1>Find the part.<br>Skip the chase.</h1>
+      <p class="hero-sub">One query sweeps every UAE shop, marketplace and seller at once, then sends you straight to the seller. No middleman, no markup, no forty-seven tabs.</p>
+      <dl class="stats">
+        <div><dt>Sources swept</dt><dd>6<span>+</span></dd></div>
+        <div><dt>Searches, not tabs</dt><dd>1</dd></div>
+        <div><dt>Markup or commission</dt><dd>0<span>%</span></dd></div>
+      </dl>
+    </div>
+
+    <div class="hero-console">
+      <div class="bezel" id="search">
+        <div class="core console">
+          <div class="console-bar">
+            <span class="led"></span>
+            <span class="console-title">parthunter / hunt</span>
+            <span class="console-live">live</span>
+          </div>
+          <div class="console-body">
+            <label class="prompt" for="searchInput"><span>›</span> what are you building?</label>
+            <div class="q">
+              <input id="searchInput" placeholder="front mount intercooler · RB25 S14 · under 2k" autocomplete="off" onkeydown="if(event.key==='Enter')runSearch()" />
+              <button class="pill" onclick="runSearch()"><span>Hunt</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></i></button>
+            </div>
+            <div class="chips">
+              <button class="chip" onclick="quickSearch('Single turbo kit RB25')">single turbo kit</button>
+              <button class="chip" onclick="quickSearch('Coilovers S14 budget')">budget coilovers</button>
+              <button class="chip" onclick="quickSearch('18 inch wheels')">18" wheels</button>
+              <button class="chip" onclick="quickSearch('Front mount intercooler')">front mount</button>
+              <button class="chip" onclick="quickSearch('Fuel injectors 1000cc')">1000cc injectors</button>
+            </div>
+
+            <div class="scanning" id="scanning">
+              <div class="scan-head"><span class="blip"></span><span id="scanHeadText">Sweeping UAE sources</span></div>
+              <div class="scan-lines" id="scanLines"></div>
+            </div>
+            <div class="interpret" id="interpret">
+              <div class="ai-row">Target acquired</div>
+              <div class="typed" id="typed"></div>
+              <div class="meta" id="interpMeta"></div>
+            </div>
+
+            <div class="console-foot" aria-hidden="true">
+              <span><b>Name-it Performance</b>live</span>
+              <span><b>Dubizzle</b>indexed</span>
+              <span><b>OpenSooq</b>indexed</span>
+              <span><b>IG sellers</b>indexed</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </header>
 
-<section class="block reveal" id="how">
+<!-- ================= HOW : asymmetric bento ================= -->
+<section class="sec reveal" id="how">
   <div class="wrap">
-    <div class="eyebrow">// How it works</div>
-    <h2 class="head">Three steps. Done.</h2>
-    <p class="lead">No more 47 tabs. PartHunter does the hunting so you can get back to building.</p>
-    <button class="reveal-btn" id="howToggle" onclick="toggleHow(this)" aria-expanded="false">See how it works ↓</button>
-    <div class="steps" id="howSteps">
-      <div class="step">
-        <div class="step-num">01</div>
-        <div class="step-ic">🔍</div>
-        <h3>Search once</h3>
-        <p>Type the part and your car. One search, plain English — "front mount for my RB25 under 2k" works fine.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <div class="step-ic">🎯</div>
-        <h3>We hunt every source</h3>
-        <p>PartHunter pulls matches from UAE shops, marketplaces, and sellers into one place — new and used, side by side.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <div class="step-ic">🚀</div>
-        <h3>Go straight to the seller</h3>
-        <p>Tap any result to head right to the shop or listing. No middleman, no markup — just the part.</p>
-      </div>
+    <div class="sec-head">
+      <h2>Three moves and you're sourcing.</h2>
+      <p>PartHunter does the hunting so you can get back to the build.</p>
     </div>
-  </div>
-</section>
-
-<section class="block reveal" id="featured">
-  <div class="wrap">
-    <div class="sec-top">
-      <div>
-        <div class="eyebrow">// Featured listings</div>
-        <h2 class="head">Featured parts</h2>
-        <p class="lead">Hand-picked stock from partner shops across the UAE. Want your inventory up here on the homepage? Get in touch.</p>
-      </div>
-      <button class="ghost-btn" onclick="document.getElementById('shopfaq').scrollIntoView()">Feature your shop →</button>
-    </div>
-    <div class="results collapsed" id="featuredGrid"></div>
-    <button class="more-btn" onclick="toggleMore('featuredGrid',this)">Show more featured ↓</button>
-  </div>
-</section>
-
-<section class="block reveal" id="results-sec" style="display:none">
-  <div class="wrap">
-    <div class="eyebrow">// Results</div>
-    <h2 class="head" id="resultsHead">Search across every UAE source</h2>
-    <p class="lead">Aggregated shop stock plus community listings. Used finds flagged in green, featured partner stock in gold.</p>
-    <div class="results collapsed" id="resultsGrid"></div>
-    <button class="more-btn" id="resultsMoreBtn" onclick="toggleMore('resultsGrid',this)">Show all results ↓</button>
-  </div>
-</section>
-
-<section class="block reveal" id="buildai">
-  <div class="wrap">
-    <div class="eyebrow">// Powered by Claude</div>
-    <h2 class="head">Don't know where to start?<br>BuildAI does.</h2>
-    <p class="lead">Pick your car, choose a direction, and get a prioritized parts plan built live for your exact platform — then ask BuildAI follow-ups.</p>
-    <div class="buildai">
-      <div class="config">
-        <div class="field">
-          <label>Your car</label>
-          <input id="car" type="text" list="carSuggestions" placeholder="e.g. Nissan Silvia S14, Toyota Cressida, anything" value="Nissan Silvia S14 / 240SX" />
-          <datalist id="carSuggestions">
-            <option value="Nissan Silvia S14 / 240SX"></option>
-            <option value="Nissan Skyline R34 GT-T"></option>
-            <option value="Toyota Supra MK4"></option>
-            <option value="Mazda RX-7 FD"></option>
-            <option value="Subaru WRX STI"></option>
-            <option value="Honda Civic EK"></option>
-            <option value="BMW E46 M3"></option>
-          </datalist>
-        </div>
-        <div class="field">
-          <label>Build direction</label>
-          <div class="goal-pills" id="goals">
-            <div class="gp active" data-g="Street &amp; reliable — solid daily setup">Street</div>
-            <div class="gp" data-g="More power — meaningful gains over its current output">More power</div>
-            <div class="gp" data-g="Track-focused — handling, braking, and track capability">Track</div>
-            <div class="gp" data-g="Show &amp; styling — looks, stance, and presence">Styling</div>
+    <button class="reveal-btn" id="howToggle" onclick="toggleHow(this)" aria-expanded="false" hidden>See how it works</button>
+    <div class="bento" id="howSteps">
+      <article class="bezel span-7 tall">
+        <div class="core step">
+          <div class="step-top">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>
+            <span class="num">01</span>
+          </div>
+          <h3>Search once, in plain English.</h3>
+          <p>Type the part and the car the way you'd say it to a mate. "Front mount for my RB25 under 2k" is a perfectly good query.</p>
+          <div class="step-art" aria-hidden="true">
+            <div class="art-field"><span class="art-caret"></span>front mount intercooler, RB25 S14, under 2k</div>
+            <div class="art-rows"><i style="--w:72%"></i><i style="--w:54%"></i><i style="--w:81%"></i><i style="--w:38%"></i></div>
           </div>
         </div>
-        <div class="field">
-          <label>Budget (AED)</label>
-          <input id="budget" type="text" value="15,000" />
+      </article>
+      <article class="bezel span-5">
+        <div class="core step">
+          <div class="step-top">
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3.5V7M12 17v3.5M3.5 12H7M17 12h3.5"/></svg>
+            <span class="num">02</span>
+          </div>
+          <h3>We sweep every source.</h3>
+          <p>Shops, marketplaces and private sellers across the UAE, pulled into one list. New and used, side by side, cheapest first.</p>
         </div>
-        <button class="build-btn" onclick="runBuild()"><span class="crosshair" style="width:16px;height:16px;position:relative"></span> Generate my build</button>
+      </article>
+      <article class="bezel span-5">
+        <div class="core step">
+          <div class="step-top">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h13M13 7l5 5-5 5"/></svg>
+            <span class="num">03</span>
+          </div>
+          <h3>Straight to the seller.</h3>
+          <p>Tap a result and you land on their page, not ours. We never hold the part, the price or the sale.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FEATURED ================= -->
+<section class="sec reveal" id="featured">
+  <div class="wrap">
+    <div class="sec-head split">
+      <div>
+        <span class="eyebrow">Featured stock</span>
+        <h2>On the radar now.</h2>
+        <p>Live inventory from partner shops across the UAE, read directly from their stores.</p>
       </div>
-      <div class="output" id="buildOut">
-        <div class="plan-empty">
-          <span class="big">🔧</span>
-          <span>Set your car + direction, then hit generate.<br>BuildAI maps your parts in real time.</span>
+      <button class="pill pill-ghost" onclick="document.getElementById('shopfaq').scrollIntoView()"><span>Feature your shop</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M4 12 12 4M6 4h6v6"/></svg></i></button>
+    </div>
+    <div class="grid collapsed" id="featuredGrid"></div>
+    <button class="more" onclick="toggleMore('featuredGrid',this)">Show all featured</button>
+  </div>
+</section>
+
+<!-- ================= RESULTS (hidden until a hunt) ================= -->
+<section class="sec reveal" id="results-sec" style="display:none">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Results</span>
+      <h2 id="resultsHead">Every UAE source, one list.</h2>
+      <p>Partner stock and community listings together. Used parts carry a grey label, partner stock an amber one.</p>
+    </div>
+    <div class="grid collapsed" id="resultsGrid"></div>
+    <button class="more" id="resultsMoreBtn" onclick="toggleMore('resultsGrid',this)">Show all results</button>
+  </div>
+</section>
+
+<!-- ================= BUILDAI ================= -->
+<section class="sec reveal" id="buildai">
+  <div class="wrap">
+    <div class="sec-head split">
+      <div>
+        <span class="eyebrow">BuildAI</span>
+        <h2>Don't know where to start?<br>Ask the planner.</h2>
+      </div>
+      <p class="sec-aside">Name the car, pick a direction, set a budget. BuildAI returns a prioritised parts list calibrated to that platform's real starting point, then answers follow-ups.</p>
+    </div>
+
+    <div class="bezel">
+      <div class="core planner">
+        <aside class="config">
+          <div class="field">
+            <label for="car">Your car</label>
+            <input id="car" type="text" list="carSuggestions" placeholder="Nissan Silvia S14, BMW F90 M5, anything" value="Nissan Silvia S14 / 240SX" />
+            <datalist id="carSuggestions">
+              <option value="Nissan Silvia S14 / 240SX"></option>
+              <option value="Nissan Skyline R34 GT-T"></option>
+              <option value="Toyota Supra A90"></option>
+              <option value="Mazda RX-7 FD"></option>
+              <option value="BMW F90 M5"></option>
+              <option value="BMW G87 M2"></option>
+              <option value="Mercedes-AMG C63 W205"></option>
+            </datalist>
+          </div>
+          <div class="field">
+            <label>Build direction</label>
+            <div class="goal-pills" id="goals" role="radiogroup">
+              <button class="gp active" data-g="Street &amp; reliable — solid daily setup" role="radio" aria-checked="true">Street</button>
+              <button class="gp" data-g="More power — meaningful gains over its current output" role="radio" aria-checked="false">More power</button>
+              <button class="gp" data-g="Track-focused — handling, braking, and track capability" role="radio" aria-checked="false">Track</button>
+              <button class="gp" data-g="Show &amp; styling — looks, stance, and presence" role="radio" aria-checked="false">Styling</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="budget">Budget, AED</label>
+            <input id="budget" type="text" inputmode="numeric" value="15,000" />
+          </div>
+          <button class="pill pill-wide build-btn" onclick="runBuild()"><span>Generate my build</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></i></button>
+        </aside>
+        <div class="output" id="buildOut">
+          <div class="plan-empty">
+            <svg class="ico-lg" viewBox="0 0 24 24"><path d="M14.5 4.5a4 4 0 0 0-5.3 5.1L4 14.8V20h5.2l5.2-5.2a4 4 0 0 0 5.1-5.3l-2.6 2.6-2.4-.6-.6-2.4Z"/></svg>
+            <span>Set the car and a direction, then generate.<br>The plan builds live, in a few seconds.</span>
+          </div>
         </div>
       </div>
     </div>
+
     <div class="buildchat" id="buildChat" style="display:none">
       <div class="chat-log" id="chatLog"></div>
       <div class="chat-input">
-        <input id="chatInput" type="text" placeholder="Ask BuildAI about your build…" onkeydown="if(event.key==='Enter')sendBuildChat()" maxlength="300" />
-        <button onclick="sendBuildChat()">Ask</button>
+        <input id="chatInput" type="text" placeholder="Ask BuildAI a follow-up about this build" onkeydown="if(event.key==='Enter')sendBuildChat()" maxlength="300" />
+        <button class="pill" onclick="sendBuildChat()"><span>Ask</span></button>
       </div>
-      <div class="chat-note">BuildAI only answers car &amp; parts questions.</div>
+      <div class="chat-note">BuildAI answers car and parts questions only.</div>
     </div>
   </div>
 </section>
 
+<!-- ================= FOR SHOPS : split list, not an accordion ================= -->
+<section class="sec reveal" id="shopfaq">
+  <div class="wrap shops">
+    <div class="shops-side">
+      <span class="eyebrow">For shops</span>
+      <h2>Your stock, on the front page.</h2>
+      <p>Free while we onboard the first UAE shops. You keep your prices, your listings and every sale.</p>
+      <button class="pill pill-amber" onclick="partnerEmail()"><span>Get featured</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M4 12 12 4M6 4h6v6"/></svg></i></button>
+      <span class="side-note">partner@parthunter.ae</span>
+    </div>
+    <dl class="qa">
+      <div><dt>Is it really free?</dt><dd>Yes. Getting featured costs nothing right now. We're onboarding a first group of UAE shops, and early partners stay front and center as PartHunter grows.</dd></div>
+      <div><dt>What do I get?</dt><dd>Your stock on the homepage and at the top of relevant searches, in front of UAE owners actively looking for exactly what you sell. Every click goes to your store.</dd></div>
+      <div><dt>What's a product feed?</dt><dd>A file your store generates automatically with names, prices, images and links. Shopify and WooCommerce produce one with a single setting. Send the link and we read it live.</dd></div>
+      <div><dt>Do I change anything on my side?</dt><dd>No. You keep selling exactly as you do now. PartHunter points buyers at your existing store. We don't take orders, payments or a cut.</dd></div>
+      <div><dt>Can you edit my prices?</dt><dd>No, and not by policy alone: we read your store live rather than keeping a copy, so there's nothing on our side to edit. What you set is what shows.</dd></div>
+      <div><dt>How do I join?</dt><dd>Email partner@parthunter.ae, or tap the button and we'll open a ready-to-send message with the details we need.</dd></div>
+    </dl>
+  </div>
+</section>
 
-<section class="block reveal" id="shopfaq">
+<!-- ================= COMMUNITY : honest, no fake numbers ================= -->
+<section class="sec reveal" id="feed">
   <div class="wrap">
-    <div class="eyebrow">// For shops</div>
-    <h2 class="head">Thinking about<br>getting featured?</h2>
-    <p class="lead">Everything a UAE shop owner asks before joining. Still got questions? Email us — we reply fast.</p>
-    <div class="faq">
-      <details class="faq-item">
-        <summary>Is it really free?</summary>
-        <p>Yes — right now, getting featured costs nothing. We're onboarding a first group of UAE shops, and early partners stay front and center as PartHunter grows. No fees, no commitment.</p>
-      </details>
-      <details class="faq-item">
-        <summary>What do I actually get?</summary>
-        <p>Your stock appears on the PartHunter homepage and at the top of relevant searches — in front of UAE car owners actively hunting for exactly what you sell. More reach, more customers, sent straight to your store.</p>
-      </details>
-      <details class="faq-item">
-        <summary>What's a product feed?</summary>
-        <p>It's a file your online store can generate automatically that lists your products — names, prices, images, and links. Most Shopify and WooCommerce stores produce one with a single setting. You send us the link; we handle the rest. No feed? Send whatever product info you have and we'll work with it.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Do I have to change anything on my side?</summary>
-        <p>No. You keep selling exactly how you do now. PartHunter just points buyers to your existing store or listings — we don't take orders, payments, or a cut.</p>
-      </details>
-      <details class="faq-item">
-        <summary>How do customers reach me?</summary>
-        <p>Every listing links straight to your shop or page. The buyer lands on you directly — no middleman, no markup, no commission.</p>
-      </details>
-      <details class="faq-item">
-        <summary>How do I join?</summary>
-        <p>Email us and we'll get you set up. Tap below and it'll open a ready-to-send message — just fill in your shop details.</p>
-      </details>
+    <div class="sec-head split">
+      <div>
+        <span class="eyebrow">Community</span>
+        <h2>Show us your build.</h2>
+        <p>Tag <b>@parthunter.ae</b> on a build you sourced through the hunt. We feature the best ones here.</p>
+      </div>
+      <a class="pill pill-ghost" href="https://instagram.com/parthunter.ae" target="_blank" rel="noopener noreferrer"><span>Open Instagram</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M4 12 12 4M6 4h6v6"/></svg></i></a>
     </div>
-    <div style="margin-top:30px">
-      <button class="gold-btn" onclick="partnerEmail()">Get featured → partner@parthunter.ae</button>
+    <div class="wall collapsed" id="feedGrid">
+      <div class="bezel slot"><div class="core"><span>Your build here</span></div></div>
+      <div class="bezel slot"><div class="core"><span>Your build here</span></div></div>
+      <div class="bezel slot wide"><div class="core"><span>Your build here</span></div></div>
     </div>
   </div>
 </section>
 
-<section class="block reveal" id="feed">
-  <div class="wrap">
-    <div class="eyebrow">// From the community</div>
-    <h2 class="head">Show us your build.</h2>
-    <p class="lead">Real builds, real finds, real prices. The UAE car scene lives here — tag @parthunter.ae and you might land on the homepage.</p>
-    <div class="feed collapsed" id="feedGrid">
-      <div class="post">
-        <div class="ph">🏎️</div>
-        <div class="pc">
-          <div class="ptop"><div class="av"><span style="position:relative;width:14px;height:14px;display:inline-block"><span style="position:absolute;inset:12%;border:1.5px solid #fff;border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:1.5px;height:100%;background:#fff"></span><span style="position:absolute;top:48%;left:0;height:1.5px;width:100%;background:#fff"></span></span></div><span class="un">@parthunter.ae</span></div>
-          <div class="cap">Scored a clean front-mount intercooler on Dubizzle for 1,400 under retail. The hunt never misses 🎯</div>
-          <div class="pmeta"><span><b>2.4k</b> likes</span><span><b>88</b> saves</span></div>
-        </div>
-      </div>
-      <div class="post">
-        <div class="ph">⚙️</div>
-        <div class="pc">
-          <div class="ptop"><div class="av"><span style="position:relative;width:14px;height:14px;display:inline-block"><span style="position:absolute;inset:12%;border:1.5px solid #fff;border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:1.5px;height:100%;background:#fff"></span><span style="position:absolute;top:48%;left:0;height:1.5px;width:100%;background:#fff"></span></span></div><span class="un">@parthunter.ae</span></div>
-          <div class="cap">POV: BuildAI just mapped a full 400whp S14 plan in seconds. Sourcing it yourself would've taken all weekend 💀</div>
-          <div class="pmeta"><span><b>5.1k</b> likes</span><span><b>312</b> saves</span></div>
-        </div>
-      </div>
-      <div class="post">
-        <div class="ph">🔥</div>
-        <div class="pc">
-          <div class="ptop"><div class="av"><span style="position:relative;width:14px;height:14px;display:inline-block"><span style="position:absolute;inset:12%;border:1.5px solid #fff;border-radius:50%"></span><span style="position:absolute;left:48%;top:0;width:1.5px;height:100%;background:#fff"></span><span style="position:absolute;top:48%;left:0;height:1.5px;width:100%;background:#fff"></span></span></div><span class="un">@parthunter.ae</span></div>
-          <div class="cap">Stop paying tourist prices for parts. One search beats 47 tabs. We said what we said.</div>
-          <div class="pmeta"><span><b>3.8k</b> likes</span><span><b>201</b> saves</span></div>
-        </div>
-      </div>
-    </div>
-    <button class="more-btn" onclick="toggleMore('feedGrid',this)">Show more posts ↓</button>
-  </div>
-</section>
-
+<!-- ================= FINAL ================= -->
 <section class="final reveal">
   <div class="wrap">
-    <h2>QUIT SCROLLING.<br><span class="stroke">START HUNTING.</span></h2>
-    <button class="build-btn" onclick="document.getElementById('search').scrollIntoView()">Find my parts →</button>
+    <h2>Quit scrolling.<br>Start hunting.</h2>
+    <button class="pill pill-lg" onclick="document.getElementById('search').scrollIntoView({behavior:'smooth'})"><span>Find my parts</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></i></button>
   </div>
 </section>
 
+</main>
+
 <footer>
-  <div class="wrap foot-in">
-    <div class="brand"><svg class="scope-icon" viewBox="-120 -120 240 240" fill="none" stroke="currentColor" aria-hidden="true"><circle r="80" stroke-width="4"/><circle r="48" stroke-width="1" stroke-dasharray="5 7"/><circle r="8" fill="currentColor" stroke="none"/><line x1="-80" x2="-22" stroke-width="4"/><line x1="22" x2="80" stroke-width="4"/><line y1="-80" y2="-22" stroke-width="4"/><line y1="22" y2="80" stroke-width="4"/><line x1="-108" y1="-108" x2="-90" y2="-90" stroke-width="2.5"/><line x1="90" y1="-90" x2="108" y2="-108" stroke-width="2.5"/><line x1="-108" y1="108" x2="-90" y2="90" stroke-width="2.5"/><line x1="90" y1="90" x2="108" y2="108" stroke-width="2.5"/></svg>PART<b>HUNTER</b></div>
-    <div class="foot-contact">
-      <div class="foot-label">Contact us</div>
-      <a href="https://instagram.com/parthunter.ae" target="_blank" rel="noopener noreferrer">📸 @parthunter.ae</a>
-      <a href="#" onclick="partnerEmail();return false;">✉️ partner@parthunter.ae</a>
+  <div class="wrap foot">
+    <a class="mark" href="#top"><svg viewBox="-120 -120 240 240" fill="none" stroke="currentColor" aria-hidden="true"><circle r="80" stroke-width="7"/><circle r="48" stroke-width="2" stroke-dasharray="5 7"/><circle r="9" fill="currentColor" stroke="none"/><line x1="-80" x2="-24" stroke-width="7"/><line x1="24" x2="80" stroke-width="7"/><line y1="-80" y2="-24" stroke-width="7"/><line y1="24" y2="80" stroke-width="7"/></svg><span>PartHunter</span></a>
+    <div class="foot-links">
+      <a href="https://instagram.com/parthunter.ae" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="#" onclick="partnerEmail();return false;">partner@parthunter.ae</a>
     </div>
-  </div>
-  <div class="wrap">
-    <span class="muted foot-copy">© 2026 PartHunter.ae — Made in the UAE 🇦🇪</span>
+    <span class="copy">© 2026 PartHunter.ae · Made in the UAE</span>
   </div>
 </footer>
 
-<div class="modal" id="sellModal">
-  <div class="modal-card">
-    <button class="close" onclick="closeSell()">✕</button>
-    <h3>Sell a part</h3>
-    <p class="ms">List your part on PartHunter. Submissions are reviewed before going live.</p>
-    <div class="field"><label>Part title</label><input id="lTitle" placeholder="e.g. Garrett GTX3076R turbo" /></div>
-    <div class="row2">
-      <div class="field"><label>Car / fitment</label><input id="lCar" placeholder="e.g. RB25 S14" /></div>
-      <div class="field"><label>Price (AED)</label><input id="lPrice" placeholder="e.g. 3,500" /></div>
-    </div>
-    <div class="row2">
-      <div class="field"><label>Condition</label>
-        <select id="lCondition"><option>Used</option><option>New</option><option>Refurbished</option></select>
+<!-- Sell a part -->
+<div class="modal" id="sellModal" role="dialog" aria-modal="true" aria-labelledby="sellTitle">
+  <div class="bezel modal-bezel">
+    <div class="core modal-card">
+      <button class="close" onclick="closeSell()" aria-label="Close">✕</button>
+      <h3 id="sellTitle">Sell a part</h3>
+      <p class="ms">List it on PartHunter. We review every submission before it goes live.</p>
+      <div class="field"><label for="lTitle">Part</label><input id="lTitle" placeholder="Garrett GTX3076R turbo" /></div>
+      <div class="row2">
+        <div class="field"><label for="lCar">Car / fitment</label><input id="lCar" placeholder="RB25 S14" /></div>
+        <div class="field"><label for="lPrice">Price, AED</label><input id="lPrice" inputmode="numeric" placeholder="3,500" /></div>
       </div>
-      <div class="field"><label>Contact (phone or email)</label><input id="lContact" placeholder="05X XXX XXXX" /></div>
+      <div class="row2">
+        <div class="field"><label for="lCondition">Condition</label><select id="lCondition"><option>Used</option><option>New</option><option>Refurbished</option></select></div>
+        <div class="field"><label for="lContact">Contact</label><input id="lContact" placeholder="05X XXX XXXX or email" /></div>
+      </div>
+      <div class="field"><label for="lLink">Link, optional</label><input id="lLink" placeholder="Dubizzle or listing URL" /></div>
+      <div class="field"><label for="lDesc">Notes, optional</label><textarea id="lDesc" placeholder="Mileage, condition, why you're selling"></textarea></div>
+      <button class="pill pill-wide" onclick="submitListing()"><span>Submit listing</span></button>
+      <div id="sellStatus" role="status"></div>
     </div>
-    <div class="field"><label>Link (optional)</label><input id="lLink" placeholder="Dubizzle / listing URL" /></div>
-    <div class="field"><label>Description (optional)</label><textarea id="lDesc" placeholder="Mileage, condition notes, why you're selling…"></textarea></div>
-    <button class="build-btn" onclick="submitListing()">Submit listing</button>
-    <div id="sellStatus"></div>
   </div>
 </div>
 
-<div class="toast" id="toast">Added to your build 🎯</div>
+<div class="toast" id="toast" role="status"></div>
 
 <script src="data.js"></script>
 <script src="search.js"></script>

@@ -4,7 +4,7 @@
 loadLiveProducts();
 async function loadLiveProducts() {
   const grid = document.getElementById('featuredGrid');
-  if (grid) grid.innerHTML = '<div class="feed-loading">Loading live parts…</div>';
+  if (grid) grid.innerHTML = Array.from({length:8},()=>'<div class="skel"><div class="img"></div><div class="l"></div><div class="l s"></div><div class="l p"></div></div>').join('');
   try {
     const res = await fetch('/api/shops');
     const data = await res.json();
@@ -16,7 +16,7 @@ async function loadLiveProducts() {
 
     renderFeatured();
   } catch (e) {
-    if (grid) grid.innerHTML = '<div class="feed-loading">Couldn’t load live parts right now. Please refresh.</div>';
+    if (grid) grid.innerHTML = '<div class="feed-loading">Live stock couldn\'t load. Refresh to try again.</div>';
   }
 }
 
@@ -24,7 +24,7 @@ function renderFeatured() {
   const grid = document.getElementById('featuredGrid');
   if (!grid) return;
   if (!FEATURED.length) {
-    grid.innerHTML = '<div class="feed-loading">No featured parts yet — check back soon.</div>';
+    grid.innerHTML = '<div class="feed-loading">No partner stock live yet. Check back soon.</div>';
     return;
   }
   grid.innerHTML = FEATURED.map(cardHTML).join('');
@@ -35,9 +35,9 @@ let toastT;
 function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.classList.add('show');
+  t.classList.add('on');
   clearTimeout(toastT);
-  toastT = setTimeout(() => t.classList.remove('show'), 2400);
+  toastT = setTimeout(() => t.classList.remove('on'), 2400);
 }
 
 // Reveal on scroll
@@ -84,12 +84,12 @@ function toggleHow(btn) {
   if (!steps) return;
   const open = steps.classList.toggle('open');
   btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  btn.textContent = open ? 'Hide ↑' : 'See how it works ↓';
+  btn.textContent = open ? 'Hide' : 'See how it works';
 }
 
 // ---- Sell a part: modal + submission ----
-function openSell() { document.getElementById('sellModal').classList.add('open'); }
-function closeSell() { document.getElementById('sellModal').classList.remove('open'); }
+function openSell() { document.getElementById('sellModal').classList.add('on'); }
+function closeSell() { document.getElementById('sellModal').classList.remove('on'); }
 
 async function submitListing() {
   const get = id => document.getElementById(id).value.trim();
@@ -106,13 +106,13 @@ async function submitListing() {
 
   // Basic client-side check
   if (!payload.title || !payload.car || !payload.price || !payload.contact) {
-    status.textContent = 'Fill in title, fitment, price, and a contact.';
+    status.textContent = 'Add the part, fitment, price and a contact to submit.';
     status.style.color = 'var(--red)';
     return;
   }
 
   status.textContent = 'Submitting…';
-  status.style.color = 'var(--muted)';
+  status.style.color = 'var(--text-3)';
 
   try {
     const res = await fetch('/api/submit-listing', {
@@ -128,13 +128,13 @@ async function submitListing() {
       n: payload.title,
       src: 'Community listing',
       price: payload.price.replace(/[^\d.,]/g, '') || payload.price,
-      emoji: '🧑‍🔧',
+      emoji: null,
       condition: payload.condition || 'Used'
     });
 
-    status.textContent = '✅ Submitted! It’s pending review and now showing in your results.';
-    status.style.color = 'var(--green)';
-    toast('Listing submitted 🎯');
+    status.textContent = 'Submitted. It\'s pending review and now showing in your results.';
+    status.style.color = 'var(--text-2)';
+    toast('Listing submitted');
     setTimeout(() => {
       closeSell();
       renderResults([...USER_LISTINGS, ...CATALOGUE]);
@@ -143,13 +143,30 @@ async function submitListing() {
       status.textContent = '';
     }, 1100);
   } catch (err) {
-    status.textContent = '⚠️ ' + err.message;
+    status.textContent = err.message;
     status.style.color = 'var(--red)';
   }
+}
+
+// ---- Island nav: mobile menu ----
+function toggleMenu() {
+  const m = document.getElementById('menu');
+  const b = document.getElementById('burger');
+  const open = !m.classList.contains('on');
+  m.classList.toggle('on', open);
+  m.setAttribute('aria-hidden', open ? 'false' : 'true');
+  b.setAttribute('aria-expanded', open ? 'true' : 'false');
+  b.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  document.body.style.overflow = open ? 'hidden' : '';
 }
 
 // Close modal on backdrop click / Esc
 document.addEventListener('click', e => {
   if (e.target.id === 'sellModal') closeSell();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSell(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  closeSell();
+  const m = document.getElementById('menu');
+  if (m && m.classList.contains('on')) toggleMenu();
+});
