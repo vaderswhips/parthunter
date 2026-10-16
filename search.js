@@ -49,6 +49,7 @@ function renderResults(list) {
   grid.classList.add('collapsed');
   const btn = document.getElementById('resultsMoreBtn');
   if (btn) btn.style.display = '';
+  if (typeof updateDots === 'function') updateDots();
 }
 
 function quickSearch(q) {

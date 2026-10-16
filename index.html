@@ -35,6 +35,9 @@
     <a onclick="document.getElementById('buildai').scrollIntoView()">BuildAI</a>
     <a onclick="document.getElementById('shopfaq').scrollIntoView()">For shops</a>
   </div>
+  <button class="focus-btn" id="focusBtn" onclick="toggleFocus()" aria-pressed="false" aria-label="Focus mode: one section per screen" title="Focus mode">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="3"/><path class="f-in" d="M7 10h6"/><path class="f-out" d="M3 8V5a2 2 0 0 1 2-2h3M12 3h3a2 2 0 0 1 2 2v3M17 12v3a2 2 0 0 1-2 2h-3M8 17H5a2 2 0 0 1-2-2v-3"/></svg>
+  </button>
   <button class="pill pill-sm" onclick="openSell()"><span>Sell a part</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M4 12 12 4M6 4h6v6"/></svg></i></button>
   <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu" onclick="toggleMenu()"><span></span><span></span></button>
 </nav>
@@ -46,14 +49,17 @@
     <a style="--i:2" onclick="toggleMenu();document.getElementById('buildai').scrollIntoView()">BuildAI</a>
     <a style="--i:3" onclick="toggleMenu();document.getElementById('shopfaq').scrollIntoView()">For shops</a>
     <a style="--i:4" onclick="toggleMenu();openSell()">Sell a part</a>
-    <div class="menu-foot" style="--i:5"><span>partner@parthunter.ae</span><span>@parthunter.ae</span></div>
+    <button class="menu-focus" style="--i:5" onclick="toggleFocus()"><span>Focus mode</span><span class="menu-focus-state" id="menuFocusState">Off</span></button>
+    <div class="menu-foot" style="--i:6"><span>partner@parthunter.ae</span><span>@parthunter.ae</span></div>
   </div>
 </div>
+
+<nav class="dots" id="dots" aria-label="Sections"></nav>
 
 <main id="top">
 
 <!-- ================= HERO : editorial split ================= -->
-<header class="hero" id="hero">
+<header class="hero" id="hero" data-label="Search">
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <span class="eyebrow">UAE car parts search</span>
@@ -112,7 +118,7 @@
 </header>
 
 <!-- ================= HOW : asymmetric bento ================= -->
-<section class="sec reveal" id="how">
+<section class="sec reveal" id="how" data-label="How it works">
   <div class="wrap">
     <div class="sec-head">
       <h2>Three moves and you're sourcing.</h2>
@@ -159,7 +165,7 @@
 </section>
 
 <!-- ================= FEATURED ================= -->
-<section class="sec reveal" id="featured">
+<section class="sec reveal" id="featured" data-label="Featured">
   <div class="wrap">
     <div class="sec-head split">
       <div>
@@ -175,7 +181,7 @@
 </section>
 
 <!-- ================= RESULTS (hidden until a hunt) ================= -->
-<section class="sec reveal" id="results-sec" style="display:none">
+<section class="sec reveal" id="results-sec" style="display:none" data-label="Results">
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow">Results</span>
@@ -188,7 +194,7 @@
 </section>
 
 <!-- ================= BUILDAI ================= -->
-<section class="sec reveal" id="buildai">
+<section class="sec reveal" id="buildai" data-label="BuildAI">
   <div class="wrap">
     <div class="sec-head split">
       <div>
@@ -250,7 +256,7 @@
 </section>
 
 <!-- ================= FOR SHOPS : split list, not an accordion ================= -->
-<section class="sec reveal" id="shopfaq">
+<section class="sec reveal" id="shopfaq" data-label="For shops">
   <div class="wrap shops">
     <div class="shops-side">
       <span class="eyebrow">For shops</span>
@@ -271,7 +277,7 @@
 </section>
 
 <!-- ================= COMMUNITY : honest, no fake numbers ================= -->
-<section class="sec reveal" id="feed">
+<section class="sec reveal" id="feed" data-label="Community">
   <div class="wrap">
     <div class="sec-head split">
       <div>
@@ -290,7 +296,7 @@
 </section>
 
 <!-- ================= FINAL ================= -->
-<section class="final reveal">
+<section class="final reveal" data-label="Start hunting">
   <div class="wrap">
     <h2>Quit scrolling.<br>Start hunting.</h2>
     <button class="pill pill-lg" onclick="document.getElementById('search').scrollIntoView({behavior:'smooth'})"><span>Find my parts</span><i class="pill-ic"><svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></i></button>

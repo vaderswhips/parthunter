@@ -418,3 +418,102 @@ footer{border-top:1px solid var(--hair-soft);padding:40px 0 calc(32px + env(safe
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   .reveal{opacity:1;transform:none;filter:none}
 }
+
+/* ============================================================
+   FOCUS MODE — one section per screen (user toggle, remembered)
+   ============================================================ */
+.focus-btn{width:38px;height:38px;border-radius:999px;display:grid;place-items:center;color:var(--text-2);background:rgba(255,255,255,.04);
+  transition:color .5s var(--ease),background .5s var(--ease),transform .5s var(--ease)}
+.focus-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.focus-btn .f-out{opacity:0;transition:opacity .5s var(--ease)}
+.focus-btn .f-in{transition:opacity .5s var(--ease)}
+.focus-btn:hover{color:var(--text);background:rgba(255,255,255,.08)}
+.focus-btn:active{transform:scale(.94)}
+.focus-btn[aria-pressed="true"]{color:var(--red-hi);background:rgba(222,67,40,.12)}
+.focus-btn[aria-pressed="true"] .f-out{opacity:1}
+.focus-btn[aria-pressed="true"] .f-in{opacity:0}
+.focus-btn[aria-pressed="true"] rect{opacity:0}
+
+.menu-focus{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding:16px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  font-size:17px;color:var(--text-2);opacity:0;transform:translateY(24px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:calc(var(--i)*70ms + 80ms)}
+.menu.on .menu-focus{opacity:1;transform:none}
+.menu-focus-state{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);border:1px solid var(--hair);border-radius:999px;padding:6px 12px}
+html.focus .menu-focus-state{color:var(--red-hi);border-color:rgba(222,67,40,.45)}
+
+/* snap container is the document */
+html.focus{scroll-snap-type:y proximity}
+html.focus .hero,html.focus .sec,html.focus .final{min-height:100dvh;scroll-snap-align:start;scroll-snap-stop:normal;display:flex;align-items:center;
+  padding-top:112px;padding-bottom:64px}
+html.focus .sec > .wrap,html.focus .final > .wrap{width:100%}
+html.focus .sec-head{margin-bottom:clamp(28px,3.4vw,44px)}
+html.focus footer{scroll-snap-align:end}
+/* keep tall grids to one screen until the user asks for more */
+html.focus .grid.collapsed > .card:nth-child(n+5){display:none}
+html.focus .grid.collapsed{max-height:none;-webkit-mask-image:none;mask-image:none}
+html.focus .reveal{opacity:1;transform:none;filter:none}   /* snapping + blur-reveal fight; let snap win */
+
+/* section indicator */
+.dots{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:var(--z-nav);display:none;flex-direction:column;gap:12px}
+html.focus .dots{display:flex}
+.dots button{width:22px;height:22px;display:grid;place-items:center;position:relative}
+.dots button::before{content:"";width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.22);transition:transform .6s var(--ease),background .6s var(--ease)}
+.dots button:hover::before{background:var(--text-2)}
+.dots button.active::before{background:var(--red);transform:scale(1.6);box-shadow:0 0 12px var(--red-glow)}
+.dots button::after{content:attr(data-label);position:absolute;right:28px;top:50%;transform:translate(6px,-50%);font-family:var(--mono);font-size:11px;color:var(--text-2);
+  white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .5s var(--ease),transform .5s var(--ease);
+  background:rgba(12,12,14,.8);backdrop-filter:blur(10px);border:1px solid var(--hair);padding:5px 9px;border-radius:999px}
+.dots button:hover::after,.dots button.active::after{opacity:1;transform:translate(0,-50%)}
+.dots button:focus-visible{outline-offset:-2px;border-radius:999px}
+
+@media (max-width:760px){
+  .dots{right:8px;gap:10px}
+  .dots button::after{display:none}
+  html.focus .hero,html.focus .sec,html.focus .final{padding-top:92px;padding-bottom:40px}
+  html.focus .grid.collapsed > .card:nth-child(n+5){display:none}
+  html.focus .grid.collapsed > .card:nth-child(n+3){display:none}  /* 2 cols × 1 row on phone */
+}
+@media (min-aspect-ratio:13/10) and (max-aspect-ratio:3/2) and (max-height:900px){
+  html.focus .hero,html.focus .sec,html.focus .final{padding-top:96px;padding-bottom:40px}
+}
+@media (prefers-reduced-motion:reduce){ html.focus{scroll-snap-type:none} }
+
+/* ============================================================
+   SHORT LANDSCAPE — folded Duo landscape, small laptops in split view
+   (wide but under ~650px tall). Keep the console beside the headline.
+   ============================================================ */
+@media (min-aspect-ratio:13/10) and (max-height:650px){
+  .hero{min-height:auto;padding:84px 0 44px}
+  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
+  .hero h1{font-size:clamp(34px,4.6vw,48px);line-height:.96}
+  .hero-sub{font-size:14px;margin-top:14px;max-width:40ch}
+  .stats{margin-top:22px;gap:26px}
+  .stats dd{font-size:26px}
+  .stats dt{font-size:10px;margin-top:5px}
+  .console-bar{padding:10px 14px}
+  .console-body{padding:14px 14px 12px}
+  .q{margin-top:10px;padding-bottom:10px}
+  .q input{font-size:15px}
+  .q .pill{padding:8px 8px 8px 16px;font-size:14px}
+  .q .pill .pill-ic{width:26px;height:26px}
+  .chips{margin-top:10px;gap:6px}
+  .chip{font-size:11px;padding:6px 10px}
+  .console-foot{display:none}
+  .sec{padding:72px 0 80px}
+  .sec-head{margin-bottom:28px}
+  .sec-head h2{font-size:clamp(30px,4vw,40px)}
+  .island{top:12px}
+  html.focus .hero,html.focus .sec,html.focus .final{padding-top:80px;padding-bottom:32px}
+  html.focus .grid.collapsed > .card:nth-child(n+4){display:none}   /* 3 cards fit one short row */
+}
+
+/* portrait tablet-ish (unfolded Duo portrait): give the stacked headline more presence */
+@media (min-width:761px) and (max-width:960px) and (orientation:portrait){
+  .hero h1{font-size:clamp(56px,8.4vw,82px)}
+  .hero-sub{font-size:18px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* dot labels: hover anywhere, pinned-open only when there's room */
+.dots button.active::after{opacity:0;transform:translate(6px,-50%)}
+@media (min-width:1400px){ .dots button.active::after{opacity:1;transform:translate(0,-50%)} }
+.dots button:hover::after{opacity:1;transform:translate(0,-50%)}

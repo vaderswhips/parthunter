@@ -170,3 +170,76 @@ document.addEventListener('keydown', e => {
   const m = document.getElementById('menu');
   if (m && m.classList.contains('on')) toggleMenu();
 });
+
+// ---- Focus mode: one section per screen ----
+const FOCUS_KEY = 'ph_focus';
+
+function focusSections() {
+  return [...document.querySelectorAll('main > [data-label]')]
+    .filter(s => s.style.display !== 'none');
+}
+
+function setFocus(on, announce) {
+  document.documentElement.classList.toggle('focus', on);
+  const btn = document.getElementById('focusBtn');
+  if (btn) {
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Focus mode on. Switch to normal view' : 'Focus mode: one section per screen');
+  }
+  const st = document.getElementById('menuFocusState');
+  if (st) st.textContent = on ? 'On' : 'Off';
+  try { localStorage.setItem(FOCUS_KEY, on ? '1' : '0'); } catch (e) {}
+  updateDots();
+  if (announce) toast(on ? 'Focus mode on. One section per screen' : 'Normal view');
+}
+
+function toggleFocus() {
+  setFocus(!document.documentElement.classList.contains('focus'), true);
+}
+
+let dotsIO = null;
+function updateDots() {
+  const wrap = document.getElementById('dots');
+  if (!wrap) return;
+  const on = document.documentElement.classList.contains('focus');
+  if (dotsIO) { dotsIO.disconnect(); dotsIO = null; }
+  if (!on) { wrap.innerHTML = ''; return; }
+
+  const secs = focusSections();
+  wrap.innerHTML = secs.map((s, i) =>
+    `<button data-label="${s.dataset.label}" aria-label="Go to ${s.dataset.label}" data-i="${i}"></button>`).join('');
+  wrap.querySelectorAll('button').forEach(b => {
+    b.onclick = () => secs[+b.dataset.i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  dotsIO = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      const i = secs.indexOf(e.target);
+      wrap.querySelectorAll('button').forEach((b, j) => b.classList.toggle('active', j === i));
+    });
+  }, { threshold: 0.55 });
+  secs.forEach(s => dotsIO.observe(s));
+}
+
+// Arrow / page keys step between sections while in focus mode
+document.addEventListener('keydown', e => {
+  if (!document.documentElement.classList.contains('focus')) return;
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+  const dir = (e.key === 'ArrowDown' || e.key === 'PageDown') ? 1 : (e.key === 'ArrowUp' || e.key === 'PageUp') ? -1 : 0;
+  if (!dir) return;
+  const secs = focusSections();
+  const mid = window.innerHeight / 2;
+  let cur = secs.findIndex(s => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; });
+  if (cur < 0) cur = 0;
+  const next = Math.max(0, Math.min(secs.length - 1, cur + dir));
+  if (next !== cur) { e.preventDefault(); secs[next].scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+});
+
+// Restore the user's choice on load (no toast)
+(function () {
+  let saved = null;
+  try { saved = localStorage.getItem(FOCUS_KEY); } catch (e) {}
+  if (saved === '1') setFocus(true, false);
+})();
